@@ -9,4 +9,4 @@ COPY .. ./
 
 RUN go build -o backend ./cmd
 
-CMD ["./backend", "server"]
+CMD ./backend db migrate ; ./backend server
