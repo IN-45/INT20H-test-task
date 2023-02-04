@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )

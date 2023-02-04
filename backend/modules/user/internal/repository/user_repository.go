@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+
 	usermodel "github.com/IN-45/INT20H-test-task/modules/user/internal/model"
 	customerrors "github.com/IN-45/INT20H-test-task/pkg/custom_errors"
 	"github.com/pkg/errors"

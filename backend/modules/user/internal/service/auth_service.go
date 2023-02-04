@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"time"
+
 	"github.com/IN-45/INT20H-test-task/modules/user/internal/model"
 	"github.com/IN-45/INT20H-test-task/modules/user/internal/repository"
 	customerrors "github.com/IN-45/INT20H-test-task/pkg/custom_errors"
@@ -9,7 +11,6 @@ import (
 	"github.com/IN-45/INT20H-test-task/pkg/jwt"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"time"
 )
 
 type AuthService struct {
