@@ -2,9 +2,9 @@ package handler
 
 import (
 	"github.com/IN-45/INT20H-test-task/modules/user/internal/service"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
-import "github.com/go-playground/validator/v10"
 
 type AuthHandler struct {
 	validator   *validator.Validate
@@ -19,7 +19,6 @@ func NewAuthHandler(
 		validator:   validator,
 		authService: authService,
 	}
-
 }
 
 func RegisterAuthHandler(app *fiber.App, h *AuthHandler) {

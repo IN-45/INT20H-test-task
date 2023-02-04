@@ -1,8 +1,9 @@
 package jwt
 
 import (
-	"github.com/golang-jwt/jwt"
 	"time"
+
+	"github.com/golang-jwt/jwt"
 )
 
 type TokenGenerator struct {
