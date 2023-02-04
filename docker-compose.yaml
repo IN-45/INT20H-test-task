@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backend/deployments/db:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=backend
+      - POSTGRES_USER=backend
+      - POSTGRES_PASSWORD=password
+    networks:
+      - backend-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    environment:
+      - DATABASE_ADDR=db:5432
+    depends_on:
+      - db
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+    external: false
