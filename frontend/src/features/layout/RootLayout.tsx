@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar';
+import { NavbarItemProps } from '../Navbar/NavbarItem';
 
 const RootLayout: FC = () => {
   /* #TODO create a root layout
@@ -9,12 +11,29 @@ const RootLayout: FC = () => {
    * probably responsible for authorization redirection
    */
 
+
   return (
-    <div>
-      <h1>RootLayout</h1>
+    <div className={'font-open-sans bg-[#FFC107]'}>
+      <Navbar routes={routes} />
       <Outlet />
     </div>
   );
 };
+
+
+const routes: NavbarItemProps[] = [
+  {
+    to: '/',
+    text: 'Home'
+  },
+  {
+    to: '/products',
+    text: 'Products'
+  },
+  {
+    to: '/recipes',
+    text: 'Recipes'
+  }
+]
 
 export default RootLayout;

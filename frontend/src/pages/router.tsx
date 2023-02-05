@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../features/layout/RootLayout';
+import Products from './Products/Products';
 
 /* #TODO implement all the routes here
  * descriptions of paths as well as suggestions should go here
@@ -17,7 +18,16 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
-    children: [],
+    children: [
+      {
+        path: 'products',
+        element: <Products />,
+      },
+      {
+        path: '*',
+        element: <h1>Test path</h1>,
+      },
+    ],
   },
 ]);
 
