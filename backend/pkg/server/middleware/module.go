@@ -24,7 +24,7 @@ var Module = fx.Options(
 			skip.New(validatorMiddleware.validateToken, func(ctx *fiber.Ctx) bool {
 				path := ctx.Path()
 				isSwaggerPath, _ := regexp.MatchString("/swagger/([a-z]*)", path)
-				isAuthPath, _ := regexp.MatchString("/sign-/([a-z]*)", path)
+				isAuthPath, _ := regexp.MatchString("/sign-([a-z]*)", path)
 
 				return isAuthPath || isSwaggerPath
 			}),
