@@ -27,7 +27,7 @@ func NewInventoryService(
 	}
 }
 
-func (s *InventoryService) Create(ctx context.Context, params InventoryParams) error {
+func (s *InventoryService) AddItem(ctx context.Context, params InventoryParams) error {
 	inventory := storage_model.NewInventory(
 		params.UserId,
 		params.ProductId,
@@ -35,7 +35,7 @@ func (s *InventoryService) Create(ctx context.Context, params InventoryParams) e
 		params.AmountType,
 	)
 
-	if err := s.inventoryRepository.Create(ctx, inventory); err != nil {
+	if err := s.inventoryRepository.AddItem(ctx, inventory); err != nil {
 		return err
 	}
 

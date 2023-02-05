@@ -29,24 +29,24 @@ func NewInventoryHandler(
 
 func RegisterInventoryHandler(app *fiber.App, h *InventoryHandler) {
 	app.Post("/inventory", h.Create)
-	app.Get("/inventory", h.GetAllById)
+	app.Get("/inventory", h.GetAllInventoryProducts)
 }
 
-// GetInventory
+// GetAllInventoryProducts
 //
-//	@Summary	Get all inventory
+//	@Summary	Get all inventory products
 //	@Tags		Inventory
 //	@Success	200	{array}		dtoInventory
 //	@Failure	401	{object}	customerrors.UnauthorizedError
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/inventory [get]
-func (h *InventoryHandler) GetAllById(ctx *fiber.Ctx) error {
+func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
 	user_id := ctx.Cookies("user_id")
 	if user_id == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	inventories, err := h.inventoryRepository.GetByUserId(ctx.Context(), uuid.MustParse(user_id))
+	inventories, err := h.inventoryRepository.GetAllInventoryProducts(ctx.Context(), uuid.MustParse(user_id))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -54,9 +54,9 @@ func (h *InventoryHandler) GetAllById(ctx *fiber.Ctx) error {
 	return ctx.JSON(mapDtoInventories(inventories))
 }
 
-// Create
+// AddProductToInventory
 //
-//	@Summary	Create new inventory
+//	@Summary	Add product to inventory
 //	@Tags		Inventory
 //	@Param		input	body		dtoCreateInventory	true	"Inventory"
 //	@Success	200		{object}	uuid.UUID
@@ -76,13 +76,13 @@ func (h *InventoryHandler) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	dto.UserId = uuid.MustParse(user_id)
+	dto.UserId = user_id
 
 	if err := h.validator.Struct(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	err := h.inventoryService.Create(ctx.Context(), createDtoToInventoryParams(dto))
+	err := h.inventoryService.AddItem(ctx.Context(), createInventoryParams(dto))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -91,14 +91,13 @@ func (h *InventoryHandler) Create(ctx *fiber.Ctx) error {
 }
 
 type dtoCreateInventory struct {
-	UserId     uuid.UUID `json:"-" validate:"uuid4"`
-	ProductId  string    `json:"product_id" validate:"required,uuid4"`
-	Amount     int       `json:"amount"`
-	AmountType string    `json:"amount_type"`
+	UserId     string `json:"-" validate:"uuid4"`
+	ProductId  string `json:"product_id" validate:"required,uuid4"`
+	Amount     int    `json:"amount"`
+	AmountType string `json:"amount_type"`
 }
 
 type dtoInventory struct {
-	UserId     uuid.UUID `json:"user_id"`
 	ProductId  uuid.UUID `json:"product_id"`
 	Amount     int       `json:"amount"`
 	AmountType string    `json:"amount_type"`

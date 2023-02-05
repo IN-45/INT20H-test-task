@@ -21,7 +21,7 @@ func mapDtoProducts(products []*storage_model.Product) []*dtoProduct {
 	return dtoProducts
 }
 
-func createDtoToProductParams(dto *dtoCreateProduct) service.ProductParams {
+func createProductParams(dto *dtoCreateProduct) service.ProductParams {
 	return service.ProductParams{
 		Name:       dto.Name,
 		CategoryId: uuid.MustParse(dto.CategoryId),
@@ -29,9 +29,9 @@ func createDtoToProductParams(dto *dtoCreateProduct) service.ProductParams {
 	}
 }
 
-func createDtoToInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
+func createInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
 	return service.InventoryParams{
-		UserId:     dto.UserId,
+		UserId:     uuid.MustParse(dto.UserId),
 		ProductId:  uuid.MustParse(dto.ProductId),
 		Amount:     dto.Amount,
 		AmountType: dto.AmountType,
@@ -56,7 +56,6 @@ func mapDtoInventories(inventories []*storage_model.Inventory) []*dtoInventory {
 
 	for _, inventory := range inventories {
 		dtoInventories = append(dtoInventories, &dtoInventory{
-			UserId:     inventory.UserId,
 			ProductId:  inventory.ProductId,
 			Amount:     inventory.Amount,
 			AmountType: inventory.AmountType,

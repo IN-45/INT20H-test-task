@@ -104,7 +104,7 @@ func (h *ProductHandler) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	id, err := h.productService.Create(ctx.Context(), createDtoToProductParams(dto))
+	id, err := h.productService.Create(ctx.Context(), createProductParams(dto))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}

@@ -66,5 +66,9 @@ func (s *AuthService) GetUserIDByEmail(ctx context.Context, email string) (strin
 		return "", err
 	}
 
+	if user == nil {
+		return "", customerrors.NewNotFoundError("user not found")
+	}
+
 	return user.Id.String(), nil
 }
