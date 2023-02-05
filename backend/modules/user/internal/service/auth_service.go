@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/IN-45/INT20H-test-task/modules/user/internal/model"
-	"github.com/IN-45/INT20H-test-task/modules/user/internal/repository"
-	customerrors "github.com/IN-45/INT20H-test-task/pkg/custom_errors"
+	user_model "github.com/IN-45/INT20H-test-task/modules/user/internal/model"
+	user_repository "github.com/IN-45/INT20H-test-task/modules/user/internal/repository"
+	customerrors "github.com/IN-45/INT20H-test-task/pkg/customerrors"
 	"github.com/IN-45/INT20H-test-task/pkg/hash"
 	"github.com/IN-45/INT20H-test-task/pkg/jwt"
 	"github.com/google/uuid"
@@ -14,12 +14,12 @@ import (
 )
 
 type AuthService struct {
-	userRepository *repository.UserRepository
+	userRepository *user_repository.UserRepository
 	tokenGenerator *jwt.TokenGenerator
 }
 
 func NewAuthService(
-	userRepository *repository.UserRepository,
+	userRepository *user_repository.UserRepository,
 	tokenGenerator *jwt.TokenGenerator,
 ) *AuthService {
 	return &AuthService{
@@ -34,7 +34,7 @@ func (s *AuthService) SignUp(ctx context.Context, email string, password string)
 		return errors.Wrap(err, "password hashing error")
 	}
 
-	user := model.NewUser(uuid.New(), email, passwordHash)
+	user := user_model.NewUser(uuid.New(), email, passwordHash)
 
 	if err := s.userRepository.Create(ctx, user); err != nil {
 		return err
