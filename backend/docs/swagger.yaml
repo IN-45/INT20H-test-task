@@ -23,6 +23,17 @@ definitions:
     required:
     - name
     type: object
+  modules_storage_internal_handler.dtoCreateInventory:
+    properties:
+      amount:
+        type: integer
+      amount_type:
+        type: string
+      product_id:
+        type: string
+    required:
+    - product_id
+    type: object
   modules_storage_internal_handler.dtoCreateProduct:
     properties:
       category_id:
@@ -34,6 +45,17 @@ definitions:
     required:
     - category_id
     - name
+    type: object
+  modules_storage_internal_handler.dtoInventory:
+    properties:
+      amount:
+        type: integer
+      amount_type:
+        type: string
+      product_id:
+        type: string
+      user_id:
+        type: string
     type: object
   modules_storage_internal_handler.dtoProduct:
     properties:
@@ -112,6 +134,54 @@ paths:
       summary: Create new category
       tags:
       - Category
+  /inventory:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/modules_storage_internal_handler.dtoInventory'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get all inventory
+      tags:
+      - Inventory
+    post:
+      parameters:
+      - description: Inventory
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateInventory'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Create new inventory
+      tags:
+      - Inventory
   /product:
     post:
       parameters:

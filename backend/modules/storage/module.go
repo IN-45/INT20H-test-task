@@ -11,13 +11,17 @@ var Module = fx.Options(
 	fx.Provide(
 		storage_handler.NewProductHandler,
 		storage_handler.NewCategoryHandler,
+		storage_handler.NewInventoryHandler,
 		storage_service.NewProductService,
 		storage_service.NewCategoryService,
+		storage_service.NewInventoryService,
 		storage_repository.NewProductRepository,
 		storage_repository.NewCategoryRepository,
+		storage_repository.NewInventoryRepository,
 	),
 	fx.Invoke(
 		storage_handler.RegisterProductHandler,
 		storage_handler.RegisterCategoryHandler,
+		storage_handler.RegisterInventoryHandler,
 	),
 )

@@ -59,3 +59,12 @@ func (s *AuthService) SignIn(ctx context.Context, email string, password string)
 
 	return s.tokenGenerator.GenerateNewAccessToken(24 * time.Hour)
 }
+
+func (s *AuthService) GetUserIDByEmail(ctx context.Context, email string) (string, error) {
+	user, err := s.userRepository.FindByEmail(ctx, email)
+	if err != nil {
+		return "", err
+	}
+
+	return user.Id.String(), nil
+}

@@ -29,6 +29,15 @@ func createDtoToProductParams(dto *dtoCreateProduct) service.ProductParams {
 	}
 }
 
+func createDtoToInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
+	return service.InventoryParams{
+		UserId:     dto.UserId,
+		ProductId:  uuid.MustParse(dto.ProductId),
+		Amount:     dto.Amount,
+		AmountType: dto.AmountType,
+	}
+}
+
 func mapDtoCategories(categories []*storage_model.Category) []*dtoCategory {
 	var dtoCategories []*dtoCategory
 
@@ -40,4 +49,19 @@ func mapDtoCategories(categories []*storage_model.Category) []*dtoCategory {
 	}
 
 	return dtoCategories
+}
+
+func mapDtoInventories(inventories []*storage_model.Inventory) []*dtoInventory {
+	var dtoInventories []*dtoInventory
+
+	for _, inventory := range inventories {
+		dtoInventories = append(dtoInventories, &dtoInventory{
+			UserId:     inventory.UserId,
+			ProductId:  inventory.ProductId,
+			Amount:     inventory.Amount,
+			AmountType: inventory.AmountType,
+		})
+	}
+
+	return dtoInventories
 }

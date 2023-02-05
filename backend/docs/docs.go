@@ -91,6 +91,80 @@ const docTemplate = `{
                 }
             }
         },
+        "/inventory": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get all inventory",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/modules_storage_internal_handler.dtoInventory"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Create new inventory",
+                "parameters": [
+                    {
+                        "description": "Inventory",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateInventory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/product": {
             "post": {
                 "tags": [
@@ -323,6 +397,23 @@ const docTemplate = `{
                 }
             }
         },
+        "modules_storage_internal_handler.dtoCreateInventory": {
+            "type": "object",
+            "required": [
+                "product_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                }
+            }
+        },
         "modules_storage_internal_handler.dtoCreateProduct": {
             "type": "object",
             "required": [
@@ -337,6 +428,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoInventory": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
