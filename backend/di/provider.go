@@ -3,6 +3,7 @@ package di
 import (
 	"github.com/IN-45/INT20H-test-task/config"
 	"github.com/IN-45/INT20H-test-task/docs"
+	"github.com/IN-45/INT20H-test-task/modules/storage"
 	"github.com/IN-45/INT20H-test-task/modules/user"
 	"github.com/IN-45/INT20H-test-task/pkg/db"
 	"github.com/IN-45/INT20H-test-task/pkg/jwt"
@@ -20,6 +21,7 @@ func ProvideModules() []fx.Option {
 		jwt.Module,
 		user.Module,
 		docs.Module,
+		storage.Module,
 	}
 
 	return modules

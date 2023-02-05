@@ -7,6 +7,45 @@ definitions:
       message:
         type: string
     type: object
+  github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError:
+    type: object
+  modules_storage_internal_handler.dtoCategory:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  modules_storage_internal_handler.dtoCreateCategory:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  modules_storage_internal_handler.dtoCreateProduct:
+    properties:
+      category_id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    required:
+    - category_id
+    - name
+    type: object
+  modules_storage_internal_handler.dtoProduct:
+    properties:
+      category:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
   modules_user_internal_handler.dtoAuth:
     properties:
       email:
@@ -24,6 +63,130 @@ info:
   contact: {}
   title: Backend API
 paths:
+  /categories:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/modules_storage_internal_handler.dtoCategory'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get all categories
+      tags:
+      - Category
+  /category:
+    post:
+      parameters:
+      - description: Category
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateCategory'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Create new category
+      tags:
+      - Category
+  /product:
+    post:
+      parameters:
+      - description: Product
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateProduct'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Create new product
+      tags:
+      - Product
+  /product/{id}:
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/modules_storage_internal_handler.dtoProduct'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get product by id
+      tags:
+      - Product
+  /products:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/modules_storage_internal_handler.dtoProduct'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get all products
+      tags:
+      - Product
   /sign-in:
     post:
       consumes:

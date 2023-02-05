@@ -18,7 +18,7 @@ func NewTokenGenerator(cfg Config) *TokenGenerator {
 
 func (g *TokenGenerator) GenerateNewAccessToken(ttl time.Duration) (string, error) {
 	claims := jwt.MapClaims{
-		"exp": time.Now().Add(ttl),
+		"exp": time.Now().Add(ttl).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

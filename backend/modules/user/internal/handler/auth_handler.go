@@ -1,19 +1,19 @@
 package handler
 
 import (
-	"github.com/IN-45/INT20H-test-task/modules/user/internal/service"
+	user_service "github.com/IN-45/INT20H-test-task/modules/user/internal/service"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
 type AuthHandler struct {
 	validator   *validator.Validate
-	authService *service.AuthService
+	authService *user_service.AuthService
 }
 
 func NewAuthHandler(
 	validator *validator.Validate,
-	authService *service.AuthService,
+	authService *user_service.AuthService,
 ) *AuthHandler {
 	return &AuthHandler{
 		validator:   validator,
@@ -26,7 +26,7 @@ func RegisterAuthHandler(app *fiber.App, h *AuthHandler) {
 	app.Post("/sign-up", h.SignUp)
 }
 
-// SignIn godoc
+// SignIn
 //
 //	@Summary	Sign in to account
 //	@Tags		Authentication
@@ -60,7 +60,7 @@ func (h *AuthHandler) SignIn(ctx *fiber.Ctx) error {
 	return nil
 }
 
-// SignUp godoc
+// SignUp
 //
 //	@Summary	Sign up into account
 //	@Tags		Authentication
