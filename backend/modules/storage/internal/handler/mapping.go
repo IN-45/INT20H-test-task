@@ -38,6 +38,35 @@ func createInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
 	}
 }
 
+func createRecipeParams(dto *dtoCreateRecipe) service.RecipeParams {
+	instructions := []storage_model.Instruction{}
+	for _, v := range dto.Instructions {
+		instructions = append(instructions, *storage_model.NewInstruction(
+			uuid.Nil,
+			v.Description,
+			v.Priority,
+		))
+	}
+	recipesProducts := []storage_model.RecipesProducts{}
+	for _, v := range dto.Products {
+		recipesProducts = append(recipesProducts, *storage_model.NewRecipesProducts(
+			uuid.Nil,
+			uuid.MustParse(v.ProductId),
+			v.Amount,
+			v.AmountType,
+		))
+	}
+	return service.RecipeParams{
+		Name:               dto.Name,
+		Description:        dto.Description,
+		AuthorId:           uuid.MustParse(dto.AuthorId),
+		CookingTimeMinutes: dto.CookingTimeMinutes,
+		ImageURL:           dto.ImageURL,
+		Instructions:       instructions,
+		RecipesProducts:    recipesProducts,
+	}
+}
+
 func mapDtoCategories(categories []*storage_model.Category) []*dtoCategory {
 	var dtoCategories []*dtoCategory
 

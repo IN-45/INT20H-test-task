@@ -23,6 +23,15 @@ definitions:
     required:
     - name
     type: object
+  modules_storage_internal_handler.dtoCreateInstruction:
+    properties:
+      description:
+        type: string
+      priority:
+        type: integer
+    required:
+    - priority
+    type: object
   modules_storage_internal_handler.dtoCreateInventory:
     properties:
       amount:
@@ -45,6 +54,40 @@ definitions:
     required:
     - category_id
     - name
+    type: object
+  modules_storage_internal_handler.dtoCreateRecipe:
+    properties:
+      cooking_time_minutes:
+        type: integer
+      description:
+        type: string
+      image_url:
+        type: string
+      instructions:
+        items:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateInstruction'
+        type: array
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateRecipesProducts'
+        type: array
+    required:
+    - name
+    type: object
+  modules_storage_internal_handler.dtoCreateRecipesProducts:
+    properties:
+      amount:
+        type: integer
+      amount_type:
+        type: string
+      product_id:
+        type: string
+    required:
+    - amount
+    - amount_type
+    - product_id
     type: object
   modules_storage_internal_handler.dtoInventory:
     properties:
@@ -255,6 +298,35 @@ paths:
       summary: Get all products
       tags:
       - Product
+  /recipe:
+    post:
+      parameters:
+      - description: Recipe
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateRecipe'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Create recipe and add products and instructions
+      tags:
+      - Recipe
   /sign-in:
     post:
       consumes:
