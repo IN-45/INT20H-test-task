@@ -7,6 +7,51 @@ definitions:
       message:
         type: string
     type: object
+  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe:
+    properties:
+      author_id:
+        type: string
+      cooking_time_minutes:
+        type: integer
+      description:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      instructions:
+        items:
+          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction'
+        type: array
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct'
+        type: array
+    type: object
+  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction:
+    properties:
+      description:
+        type: string
+      priority:
+        type: integer
+    type: object
+  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct:
+    properties:
+      amount:
+        type: integer
+      amount_type:
+        type: string
+      category_id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      product_id:
+        type: string
+    type: object
   github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError:
     type: object
   modules_storage_internal_handler.dtoCategory:
@@ -45,6 +90,8 @@ definitions:
     type: object
   modules_storage_internal_handler.dtoCreateProduct:
     properties:
+      amount_type:
+        type: string
       category_id:
         type: string
       image_url:
@@ -100,6 +147,8 @@ definitions:
     type: object
   modules_storage_internal_handler.dtoProduct:
     properties:
+      amount_type:
+        type: string
       category:
         type: string
       id:
@@ -299,6 +348,25 @@ paths:
       tags:
       - Product
   /recipe:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get all recipes
+      tags:
+      - Recipe
     post:
       parameters:
       - description: Recipe

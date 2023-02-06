@@ -31,6 +31,7 @@ func NewRecipeHandler(
 
 func RegisterRecipeHandler(app *fiber.App, h *RecipeHandler) {
 	app.Post("/recipe", h.Create)
+	app.Get("/recipe", h.GetAll)
 }
 
 // CreateRecipe
@@ -67,6 +68,23 @@ func (h *RecipeHandler) Create(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(id)
+}
+
+// GetAllRecipes
+//
+//	@Summary	Get all recipes
+//	@Tags		Recipe
+//	@Success	200	{array}		storage_service.DtoRecipe
+//	@Failure	401	{object}	customerrors.UnauthorizedError
+//	@Failure	500	{object}	fiber.Error
+//	@Router		/recipe [get]
+func (h *RecipeHandler) GetAll(ctx *fiber.Ctx) error {
+	recipes, err := h.recipeService.GetAllRecipes(ctx.Context())
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(recipes)
 }
 
 type dtoCreateRecipesProducts struct {
