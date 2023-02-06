@@ -11,11 +11,10 @@ const RootLayout: FC = () => {
    * probably responsible for authorization redirection
    */
 
-
   return (
-    <div className={'font-open-sans bg-[#FFC107]'}>
+    <div className='font-open-sans'>
       <Navbar routes={routes} />
-      <div className='mx-auto mt-5 mb-12 xl:w-[1300px] lg:w-[1030px] md:w-[940px] max-md:m-5 h-screen'>
+      <div className='mx-auto pt-5 pb-12 xl:w-[1300px] lg:w-[1030px] md:w-[940px] max-md:m-5'>
         <Outlet />
       </div>
     </div>
@@ -25,16 +24,16 @@ const RootLayout: FC = () => {
 const routes: NavbarItemProps[] = [
   {
     to: '/',
-    text: 'Home'
+    text: 'Home',
   },
   {
     to: '/products',
-    text: 'Products'
+    text: 'Products',
   },
   {
     to: '/recipes',
-    text: 'Recipes'
-  }
-]
+    text: 'Recipes',
+  },
+];
 
 export default RootLayout;

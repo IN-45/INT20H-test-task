@@ -15,11 +15,13 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
 
   return (
     <nav className='flex items-center justify-between flex-wrap bg-navbar p-6'>
-      <div className='flex items-center flex-shrink-0 text-white mr-6'>
-        <span className='font-semibold text-xl tracking-tight'>🍕 Food App</span>
-      </div>
+      <NavLink to={'/home'}>
+        <div className='flex items-center flex-shrink-0 text-black-main mr-6'>
+          <span className='font-semibold text-xl tracking-tight'>🍕 Food App</span>
+        </div>
+      </NavLink>
       <div className='block lg:hidden' onClick={tweakMenu}>
-        <button className='flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white'>
+        <button className='flex items-center px-3 py-2 border rounded text-black-main border-black-main hover:text-white hover:border-white'>
           <svg
             className='fill-current h-3 w-3'
             viewBox='0 0 20 20'

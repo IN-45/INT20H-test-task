@@ -12,7 +12,7 @@ const NavbarItem: FC<NavbarItemProps> = ({ to, text }) => {
       end
       to={to}
       className={({ isActive }) =>
-        'block w-fit mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white active:bg-teal-500 active:text-white active:outline-none py-2 px-4 rounded mx-2 select-none' +
+        'block w-fit mt-4 lg:inline-block lg:mt-0 text-orange-main hover:bg-orange-main hover:text-white active:bg-orange-main active:text-white active:outline-none py-2 px-4 rounded mx-2 select-none' +
         (isActive ? ' py-2 px-4 bg-navbar-link-active' : '')
       }
     >
