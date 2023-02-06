@@ -4,6 +4,7 @@ import (
 	"context"
 
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
+	"github.com/google/uuid"
 
 	customerrors "github.com/IN-45/INT20H-test-task/pkg/customerrors"
 	"github.com/uptrace/bun"
@@ -36,4 +37,26 @@ func (r *RecipeRepository) AddProducts(ctx context.Context, products []storage_m
 	}
 
 	return err
+}
+
+func (r *RecipeRepository) GetAllRecipes(ctx context.Context) ([]*storage_model.Recipe, error) {
+	var recipes []*storage_model.Recipe
+
+	err := r.db.NewSelect().
+		Model(&recipes).
+		Scan(ctx)
+
+	print(recipes)
+	return recipes, err
+}
+
+func (r *RecipeRepository) GetProductsForRecipe(ctx context.Context, recipeId uuid.UUID) ([]*storage_model.RecipesProducts, error) {
+	var products []*storage_model.RecipesProducts
+
+	err := r.db.NewSelect().
+		Model(&products).
+		Relation("Product").
+		Scan(ctx)
+
+	return products, err
 }

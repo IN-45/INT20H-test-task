@@ -282,6 +282,35 @@ const docTemplate = `{
             }
         },
         "/recipe": {
+            "get": {
+                "tags": [
+                    "Recipe"
+                ],
+                "summary": "Get all recipes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Recipe"
@@ -417,6 +446,75 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "cooking_time_minutes": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct"
+                    }
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError": {
             "type": "object"
         },
@@ -480,6 +578,9 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "amount_type": {
+                    "type": "string"
+                },
                 "category_id": {
                     "type": "string"
                 },
@@ -559,6 +660,9 @@ const docTemplate = `{
         "modules_storage_internal_handler.dtoProduct": {
             "type": "object",
             "properties": {
+                "amount_type": {
+                    "type": "string"
+                },
                 "category": {
                     "type": "string"
                 },
