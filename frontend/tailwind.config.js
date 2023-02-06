@@ -8,10 +8,9 @@ module.exports = {
         'open-sans': ['Open Sans', 'sans-serif'],
       },
       backgroundColor: {
-        'navbar-link':
-          {
-            'active': '#008080',
-          },
+        'navbar-link': {
+          active: '#008080',
+        },
         navbar: '#001f3f',
       },
       colors: {
@@ -23,8 +22,12 @@ module.exports = {
         orange: {
           main: '#FF845E',
         },
+        red: {
+          secondary: '#D34E24',
+        },
       },
       fontSize: {
+        '2xs': ['13px', '20px'],
         sm: ['12px', '15px'],
         md: ['16px', '20px'],
         lg: ['20px', '30px'],
