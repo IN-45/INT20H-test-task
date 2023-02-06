@@ -11,8 +11,9 @@ const RootLayout: FC = () => {
 
   return (
     <div>
-      <h1>RootLayout</h1>
-      <Outlet />
+      <div className='mx-auto mt-5 mb-12 xl:w-[1300px] lg:w-[1030px] md:w-[940px] max-md:m-5 h-screen'>
+        <Outlet />
+      </div>
     </div>
   );
 };
