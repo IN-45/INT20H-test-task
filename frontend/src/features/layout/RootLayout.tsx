@@ -15,11 +15,12 @@ const RootLayout: FC = () => {
   return (
     <div className={'font-open-sans bg-[#FFC107]'}>
       <Navbar routes={routes} />
-      <Outlet />
+      <div className='mx-auto mt-5 mb-12 xl:w-[1300px] lg:w-[1030px] md:w-[940px] max-md:m-5 h-screen'>
+        <Outlet />
+      </div>
     </div>
   );
 };
-
 
 const routes: NavbarItemProps[] = [
   {

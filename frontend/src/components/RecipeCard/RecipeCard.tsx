@@ -22,7 +22,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   created_at,
 }) => {
   return (
-    <div className='Card sm:max-w-[400px] space-y-3 hover:text-orange-main relative' id={id}>
+    <div className='sm:max-w-[400px] space-y-3 hover:text-orange-main relative' id={id}>
       <img
         src={image}
         alt={name}

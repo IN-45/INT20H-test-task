@@ -2,6 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../features/layout/RootLayout';
 import Products from './Products/Products';
 
+import NotFound from './NotFound';
+import RecipePage from './RecipePage';
+
 /* #TODO implement all the routes here
  * descriptions of paths as well as suggestions should go here
  * (dishes/recipes)/:id for dishes/recipes(choose one of the names)
@@ -24,8 +27,12 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       {
+        path: 'recipe/:id',
+        element: <RecipePage />,
+      },
+      {
         path: '*',
-        element: <h1>Test path</h1>,
+        element: <NotFound />,
       },
     ],
   },

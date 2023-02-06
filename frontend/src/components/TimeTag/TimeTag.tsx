@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as CalendarIcon } from '../../icons/calendar.svg';
 
 interface TimeTagProps {
   time: Date;
@@ -19,7 +20,8 @@ const TimeTag: React.FC<TimeTagProps> = ({ time, className }) => {
   const year = time.getFullYear();
 
   return (
-    <div className={'TimeTag ' + className}>
+    <div className={'flex ' + className}>
+      <CalendarIcon className='w-[15px] h-[15px] mr-1' />
       <p className='text-xs '>
         {day}.{month}.{year}
       </p>
