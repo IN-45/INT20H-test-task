@@ -21,7 +21,7 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
         </div>
       </NavLink>
       <div className='block lg:hidden' onClick={tweakMenu}>
-        <button className='flex items-center px-3 py-2 border rounded text-black-main border-black-main hover:text-white hover:border-white'>
+        <button className='flex items-center px-3 py-2 border rounded text-black-main border-black-main hover:text-orange-main hover:border-orange-main'>
           <svg
             className='fill-current h-3 w-3'
             viewBox='0 0 20 20'
