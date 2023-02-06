@@ -19,16 +19,7 @@ CREATE TABLE instructions (
     CONSTRAINT recipe_id_fk FOREIGN KEY("recipe_id") REFERENCES recipes("id") ON DELETE CASCADE
 );
 --bun:split
-/* CREATE TYPE amount_type AS ENUM (
-    'g',
-    'mg',
-    'kg',
-    'l',
-    'ml',
-    'tablesp',
-    'teasp',
-    'pcs'
-); */
+
 CREATE TABLE recipes_products(
     "recipe_id" uuid,
     "product_id" uuid,

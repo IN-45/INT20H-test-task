@@ -11,10 +11,11 @@ func mapDtoProducts(products []*storage_model.Product) []*dtoProduct {
 
 	for _, product := range products {
 		dtoProducts = append(dtoProducts, &dtoProduct{
-			Id:       product.Id,
-			Name:     product.Name,
-			Category: product.Category.Name,
-			ImageURL: product.ImageURL,
+			Id:         product.Id,
+			Name:       product.Name,
+			Category:   product.Category.Name,
+			ImageURL:   product.ImageURL,
+			AmountType: product.AmountType,
 		})
 	}
 
@@ -26,6 +27,7 @@ func createProductParams(dto *dtoCreateProduct) service.ProductParams {
 		Name:       dto.Name,
 		CategoryId: uuid.MustParse(dto.CategoryId),
 		ImageURL:   dto.ImageURL,
+		AmountType: dto.AmountType,
 	}
 }
 

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
 	storage_repository "github.com/IN-45/INT20H-test-task/modules/storage/internal/repository"
@@ -34,6 +35,19 @@ func (s *InventoryService) AddItem(ctx context.Context, params InventoryParams) 
 		params.Amount,
 		params.AmountType,
 	)
+
+	storedInventory, err := s.inventoryRepository.GetProductById(ctx, params.UserId, params.ProductId)
+	if err != nil {
+		return err
+	}
+
+	if storedInventory != nil {
+		if storedInventory.AmountType == inventory.AmountType {
+			inventory.Amount += storedInventory.Amount
+		} else {
+			return errors.New("invalid amount type")
+		}
+	}
 
 	if err := s.inventoryRepository.AddItem(ctx, inventory); err != nil {
 		return err
