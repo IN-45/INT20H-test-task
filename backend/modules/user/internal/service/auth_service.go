@@ -60,15 +60,15 @@ func (s *AuthService) SignIn(ctx context.Context, email string, password string)
 	return s.tokenGenerator.GenerateNewAccessToken(24 * time.Hour)
 }
 
-func (s *AuthService) GetUserIDByEmail(ctx context.Context, email string) (string, error) {
+func (s *AuthService) GetUserIdByEmail(ctx context.Context, email string) (uuid.UUID, error) {
 	user, err := s.userRepository.FindByEmail(ctx, email)
 	if err != nil {
-		return "", err
+		return uuid.Nil, err
 	}
 
 	if user == nil {
-		return "", customerrors.NewNotFoundError("user not found")
+		return uuid.Nil, customerrors.NewNotFoundError("user not found")
 	}
 
-	return user.Id.String(), nil
+	return user.Id, nil
 }

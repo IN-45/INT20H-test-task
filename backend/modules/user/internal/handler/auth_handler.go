@@ -52,7 +52,7 @@ func (h *AuthHandler) SignIn(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	id, err := h.authService.GetUserIDByEmail(ctx.Context(), dto.Email)
+	id, err := h.authService.GetUserIdByEmail(ctx.Context(), dto.Email)
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -63,7 +63,7 @@ func (h *AuthHandler) SignIn(ctx *fiber.Ctx) error {
 	})
 	ctx.Cookie(&fiber.Cookie{
 		Name:  "user_id",
-		Value: id,
+		Value: id.String(),
 		// Secure:   true,
 		// HTTPOnly: true,
 	})

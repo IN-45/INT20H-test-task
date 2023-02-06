@@ -96,7 +96,7 @@ const docTemplate = `{
                 "tags": [
                     "Inventory"
                 ],
-                "summary": "Get all inventory",
+                "summary": "Get all inventory products",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -125,7 +125,7 @@ const docTemplate = `{
                 "tags": [
                     "Inventory"
                 ],
-                "summary": "Create new inventory",
+                "summary": "Add product to inventory",
                 "parameters": [
                     {
                         "description": "Inventory",
@@ -442,9 +442,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "product_id": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
