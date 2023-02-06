@@ -8,7 +8,7 @@ interface AuthorTagProps {
 
 const AuthorTag: React.FC<AuthorTagProps> = ({ author, className }) => {
   return (
-    <div className={'AuthorTag flex ' + className}>
+    <div className={'flex ' + className}>
       <ProfileIcon />
       <p className='text-sm font-medium pl-1.5'>{author}</p>
     </div>
