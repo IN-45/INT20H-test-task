@@ -64,8 +64,6 @@ func (h *AuthHandler) SignIn(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:  "user_id",
 		Value: id.String(),
-		// Secure:   true,
-		// HTTPOnly: true,
 	})
 
 	return nil
