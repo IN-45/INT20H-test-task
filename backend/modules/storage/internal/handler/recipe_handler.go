@@ -31,6 +31,7 @@ func NewRecipeHandler(
 
 func RegisterRecipeHandler(app *fiber.App, h *RecipeHandler) {
 	app.Post("/recipe", h.Create)
+	app.Get("/recipe", h.GetAll)
 }
 
 // Create
