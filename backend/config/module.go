@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/IN-45/INT20H-test-task/pkg/cloudstorage"
 	"github.com/IN-45/INT20H-test-task/pkg/db"
 	"github.com/IN-45/INT20H-test-task/pkg/jwt"
 	"github.com/IN-45/INT20H-test-task/pkg/server"
@@ -17,5 +18,8 @@ var Module = fx.Provide(
 	},
 	func(cfg *Config) jwt.Config {
 		return cfg.JWTConfig
+	},
+	func(cfg *Config) cloudstorage.Config {
+		return cfg.CloudStorageConfig
 	},
 )
