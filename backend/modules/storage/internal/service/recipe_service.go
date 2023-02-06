@@ -8,14 +8,27 @@ import (
 	"github.com/google/uuid"
 )
 
+type Instructions struct {
+	RecipeId    uuid.UUID
+	Description string
+	Priority    int
+}
+
+type RecipesProducts struct {
+	RecipeId   uuid.UUID
+	ProductId  uuid.UUID
+	Amount     int
+	AmountType string
+}
+
 type RecipeParams struct {
 	Name               string
-	Description         string
+	Description        string
 	AuthorId           uuid.UUID
 	CookingTimeMinutes int
 	ImageURL           string
-	Instructions       []storage_model.Instruction
-	RecipesProducts    []storage_model.RecipesProducts
+	Instructions       []Instructions
+	RecipesProducts    []RecipesProducts
 }
 
 type RecipeService struct {
@@ -48,17 +61,30 @@ func (s *RecipeService) AddRecipe(ctx context.Context, params RecipeParams) (uui
 		return uuid.Nil, err
 	}
 
+	var instructions []storage_model.Instruction
 	for i := range params.Instructions {
 		params.Instructions[i].RecipeId = recipe.Id
+		instructions = append(instructions, *storage_model.NewInstruction(
+			params.Instructions[i].RecipeId,
+			params.Instructions[i].Description,
+			params.Instructions[i].Priority,
+		))
 	}
-	if err := s.instructionRepository.AddInstructions(ctx, params.Instructions); err != nil {
+	if err := s.instructionRepository.AddInstructions(ctx, instructions); err != nil {
 		return uuid.Nil, err
 	}
 
+	var recipesProducts []storage_model.RecipesProducts
 	for i := range params.RecipesProducts {
 		params.RecipesProducts[i].RecipeId = recipe.Id
+		recipesProducts = append(recipesProducts, *storage_model.NewRecipesProducts(
+			params.RecipesProducts[i].RecipeId,
+			params.RecipesProducts[i].ProductId,
+			params.RecipesProducts[i].Amount,
+			params.RecipesProducts[i].AmountType,
+		))
 	}
-	if err := s.recipeRepository.AddProducts(ctx, params.RecipesProducts); err != nil {
+	if err := s.recipeRepository.AddProducts(ctx, recipesProducts); err != nil {
 		return uuid.Nil, err
 	}
 
