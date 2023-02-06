@@ -104,7 +104,7 @@ func (h *ProductHandler) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	id, err := h.productService.Create(ctx.Context(), createDtoToProductParams(dto))
+	id, err := h.productService.Create(ctx.Context(), createProductParams(dto))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -113,10 +113,11 @@ func (h *ProductHandler) Create(ctx *fiber.Ctx) error {
 }
 
 type dtoProduct struct {
-	Id       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Category string    `json:"category"`
-	ImageURL string    `json:"image_url"`
+	Id         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	Category   string    `json:"category"`
+	ImageURL   string    `json:"image_url"`
+	AmountType string    `json:"amount_type"`
 }
 
 type dtoGetProductById struct {
@@ -127,4 +128,5 @@ type dtoCreateProduct struct {
 	Name       string `json:"name" validate:"required"`
 	CategoryId string `json:"category_id" validate:"required,uuid4"`
 	ImageURL   string `json:"image_url"`
+	AmountType string `json:"amount_type"`
 }

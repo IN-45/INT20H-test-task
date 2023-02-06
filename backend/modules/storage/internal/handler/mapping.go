@@ -11,21 +11,61 @@ func mapDtoProducts(products []*storage_model.Product) []*dtoProduct {
 
 	for _, product := range products {
 		dtoProducts = append(dtoProducts, &dtoProduct{
-			Id:       product.Id,
-			Name:     product.Name,
-			Category: product.Category.Name,
-			ImageURL: product.ImageURL,
+			Id:         product.Id,
+			Name:       product.Name,
+			Category:   product.Category.Name,
+			ImageURL:   product.ImageURL,
+			AmountType: product.AmountType,
 		})
 	}
 
 	return dtoProducts
 }
 
-func createDtoToProductParams(dto *dtoCreateProduct) service.ProductParams {
+func createProductParams(dto *dtoCreateProduct) service.ProductParams {
 	return service.ProductParams{
 		Name:       dto.Name,
 		CategoryId: uuid.MustParse(dto.CategoryId),
 		ImageURL:   dto.ImageURL,
+		AmountType: dto.AmountType,
+	}
+}
+
+func createInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
+	return service.InventoryParams{
+		UserId:     uuid.MustParse(dto.UserId),
+		ProductId:  uuid.MustParse(dto.ProductId),
+		Amount:     dto.Amount,
+		AmountType: dto.AmountType,
+	}
+}
+
+func createRecipeParams(dto *dtoCreateRecipe) service.RecipeParams {
+	instructions := []service.Instructions{}
+	for _, v := range dto.Instructions {
+		instructions = append(instructions, service.Instructions{
+			RecipeId:    uuid.Nil,
+			Description: v.Description,
+			Priority:    v.Priority,
+		})
+	}
+	recipesProducts := []service.RecipesProducts{}
+	for _, v := range dto.Products {
+		recipesProducts = append(recipesProducts, service.RecipesProducts{
+			RecipeId:   uuid.Nil,
+			ProductId:  uuid.MustParse(v.ProductId),
+			Amount:     v.Amount,
+			AmountType: v.AmountType,
+		})
+	}
+	return service.RecipeParams{
+		Name:               dto.Name,
+		Description:        dto.Description,
+		AuthorId:           uuid.MustParse(dto.AuthorId),
+		CookingTimeMinutes: dto.CookingTimeMinutes,
+		ImageURL:           dto.ImageURL,
+		Instructions:       instructions,
+		RecipesProducts:    recipesProducts,
 	}
 }
 
@@ -40,4 +80,18 @@ func mapDtoCategories(categories []*storage_model.Category) []*dtoCategory {
 	}
 
 	return dtoCategories
+}
+
+func mapDtoInventories(inventories []*storage_model.Inventory) []*dtoInventory {
+	var dtoInventories []*dtoInventory
+
+	for _, inventory := range inventories {
+		dtoInventories = append(dtoInventories, &dtoInventory{
+			ProductId:  inventory.ProductId,
+			Amount:     inventory.Amount,
+			AmountType: inventory.AmountType,
+		})
+	}
+
+	return dtoInventories
 }
