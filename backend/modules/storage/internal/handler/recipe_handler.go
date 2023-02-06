@@ -34,7 +34,7 @@ func RegisterRecipeHandler(app *fiber.App, h *RecipeHandler) {
 	app.Get("/recipe", h.GetAll)
 }
 
-// CreateRecipe
+// Create
 //
 //	@Summary	Create recipe and add products and instructions
 //	@Tags		Recipe
@@ -70,7 +70,7 @@ func (h *RecipeHandler) Create(ctx *fiber.Ctx) error {
 	return ctx.JSON(id)
 }
 
-// GetAllRecipes
+// GetAll
 //
 //	@Summary	Get all recipes
 //	@Tags		Recipe
