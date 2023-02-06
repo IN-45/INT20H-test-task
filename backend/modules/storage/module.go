@@ -13,6 +13,7 @@ var Module = fx.Options(
 		storage_handler.NewCategoryHandler,
 		storage_handler.NewInventoryHandler,
 		storage_handler.NewRecipeHandler,
+		storage_handler.NewUploaderHandler,
 		storage_service.NewProductService,
 		storage_service.NewCategoryService,
 		storage_service.NewInventoryService,
@@ -28,5 +29,6 @@ var Module = fx.Options(
 		storage_handler.RegisterCategoryHandler,
 		storage_handler.RegisterInventoryHandler,
 		storage_handler.RegisterRecipeHandler,
+		storage_handler.RegisterUploaderHandler,
 	),
 )

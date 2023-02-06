@@ -5,6 +5,7 @@ import (
 	"github.com/IN-45/INT20H-test-task/docs"
 	"github.com/IN-45/INT20H-test-task/modules/storage"
 	"github.com/IN-45/INT20H-test-task/modules/user"
+	"github.com/IN-45/INT20H-test-task/pkg/cloudstorage"
 	"github.com/IN-45/INT20H-test-task/pkg/db"
 	"github.com/IN-45/INT20H-test-task/pkg/jwt"
 	"github.com/IN-45/INT20H-test-task/pkg/server"
@@ -22,6 +23,7 @@ func ProvideModules() []fx.Option {
 		user.Module,
 		docs.Module,
 		storage.Module,
+		cloudstorage.Module,
 	}
 
 	return modules
