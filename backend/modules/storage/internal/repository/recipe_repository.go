@@ -4,7 +4,6 @@ import (
 	"context"
 
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
-	// "github.com/google/uuid"
 
 	customerrors "github.com/IN-45/INT20H-test-task/pkg/customerrors"
 	"github.com/uptrace/bun"
