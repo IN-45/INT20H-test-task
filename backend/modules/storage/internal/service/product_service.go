@@ -12,6 +12,7 @@ type ProductParams struct {
 	Name       string
 	CategoryId uuid.UUID
 	ImageURL   string
+	AmountType string
 }
 
 type ProductService struct {
@@ -32,6 +33,7 @@ func (s *ProductService) Create(ctx context.Context, params ProductParams) (uuid
 		params.CategoryId,
 		params.Name,
 		params.ImageURL,
+		params.AmountType,
 	)
 
 	if err := s.productRepository.Create(ctx, product); err != nil {

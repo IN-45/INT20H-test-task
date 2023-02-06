@@ -91,6 +91,80 @@ const docTemplate = `{
                 }
             }
         },
+        "/inventory": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get all inventory products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/modules_storage_internal_handler.dtoInventory"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Add product to inventory",
+                "parameters": [
+                    {
+                        "description": "Inventory",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateInventory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/product": {
             "post": {
                 "tags": [
@@ -207,6 +281,80 @@ const docTemplate = `{
                 }
             }
         },
+        "/recipe": {
+            "get": {
+                "tags": [
+                    "Recipe"
+                ],
+                "summary": "Get all recipes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Recipe"
+                ],
+                "summary": "Create recipe and add products and instructions",
+                "parameters": [
+                    {
+                        "description": "Recipe",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateRecipe"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/sign-in": {
             "post": {
                 "consumes": [
@@ -284,6 +432,49 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/upload": {
+            "post": {
+                "tags": [
+                    "Files Uploading"
+                ],
+                "summary": "Upload file to cloud storage",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/modules_storage_internal_handler.dtoUploadedFile"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -294,6 +485,75 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "cooking_time_minutes": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct"
+                    }
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "product_id": {
                     "type": "string"
                 }
             }
@@ -323,6 +583,37 @@ const docTemplate = `{
                 }
             }
         },
+        "modules_storage_internal_handler.dtoCreateInstruction": {
+            "type": "object",
+            "required": [
+                "priority"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoCreateInventory": {
+            "type": "object",
+            "required": [
+                "product_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                }
+            }
+        },
         "modules_storage_internal_handler.dtoCreateProduct": {
             "type": "object",
             "required": [
@@ -330,6 +621,9 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "amount_type": {
+                    "type": "string"
+                },
                 "category_id": {
                     "type": "string"
                 },
@@ -341,9 +635,77 @@ const docTemplate = `{
                 }
             }
         },
+        "modules_storage_internal_handler.dtoCreateRecipe": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "cooking_time_minutes": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateInstruction"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateRecipesProducts"
+                    }
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoCreateRecipesProducts": {
+            "type": "object",
+            "required": [
+                "amount",
+                "amount_type",
+                "product_id"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoInventory": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                }
+            }
+        },
         "modules_storage_internal_handler.dtoProduct": {
             "type": "object",
             "properties": {
+                "amount_type": {
+                    "type": "string"
+                },
                 "category": {
                     "type": "string"
                 },
@@ -354,6 +716,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoUploadedFile": {
+            "type": "object",
+            "properties": {
+                "file_url": {
                     "type": "string"
                 }
             }
