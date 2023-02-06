@@ -158,6 +158,11 @@ definitions:
       name:
         type: string
     type: object
+  modules_storage_internal_handler.dtoUploadedFile:
+    properties:
+      file_url:
+        type: string
+    type: object
   modules_user_internal_handler.dtoAuth:
     properties:
       email:
@@ -445,4 +450,32 @@ paths:
       summary: Sign up into account
       tags:
       - Authentication
+  /upload:
+    post:
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/modules_storage_internal_handler.dtoUploadedFile'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Upload file to cloud storage
+      tags:
+      - Files Uploading
 swagger: "2.0"
