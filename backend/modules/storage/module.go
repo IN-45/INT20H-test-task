@@ -11,6 +11,7 @@ var Module = fx.Options(
 	fx.Provide(
 		storage_handler.NewProductHandler,
 		storage_handler.NewCategoryHandler,
+		storage_handler.NewUploaderHandler,
 		storage_service.NewProductService,
 		storage_service.NewCategoryService,
 		storage_repository.NewProductRepository,
@@ -19,5 +20,6 @@ var Module = fx.Options(
 	fx.Invoke(
 		storage_handler.RegisterProductHandler,
 		storage_handler.RegisterCategoryHandler,
+		storage_handler.RegisterUploaderHandler,
 	),
 )
