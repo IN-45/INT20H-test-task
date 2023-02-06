@@ -1,18 +1,18 @@
 import React from 'react';
 import { ReactComponent as ClockIcon } from '../../icons/clock.svg';
 
-interface CategoryTagProps {
+interface DurationTagProps {
   duration: number;
   className?: string;
 }
 
-const CategoryTag: React.FC<CategoryTagProps> = ({ duration, className }) => {
+const DurationTag: React.FC<DurationTagProps> = ({ duration, className }) => {
   return (
-    <div className={'CategoryTag flex ' + className}>
+    <div className={'flex ' + className}>
       <ClockIcon className='w-[15px] h-[15px]' />
-      <p className='text-sm font-medium ml-2'>{duration} хв</p>
+      <p className='text-sm font-medium ml-1'>{duration} хв</p>
     </div>
   );
 };
 
-export default CategoryTag;
+export default DurationTag;
