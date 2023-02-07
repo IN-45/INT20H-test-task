@@ -32,6 +32,10 @@ const router = createBrowserRouter([
         element: <RecipePage />,
       },
       {
+        path: 'products',
+        element: <Products />,
+      },
+      {
         path: 'sign-in',
         element: <SignPage action={'sign-in'} />,
       },
