@@ -5,6 +5,7 @@ import SignPage from './Sign/SignPage';
 
 import NotFound from './NotFound';
 import RecipePage from './RecipePage';
+import AddRecipePage from './AddRecipePage';
 
 /* #TODO implement all the routes here
  * descriptions of paths as well as suggestions should go here
@@ -28,8 +29,17 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       {
-        path: 'recipe/:id',
-        element: <RecipePage />,
+        path: 'recipe',
+        children: [
+          {
+            path: 'new',
+            element: <AddRecipePage />,
+          },
+          {
+            path: ':id',
+            element: <RecipePage />,
+          },
+        ],
       },
       {
         path: 'products',
