@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
+	"sort"
+
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
 	"github.com/google/uuid"
-	"sort"
 )
 
 type FilterRecipesService struct {
@@ -68,7 +69,8 @@ func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UU
 
 func (f *FilterRecipesService) findInInventory(
 	recipeProduct *storage_model.RecipeProducts,
-	inventoryProducts []*storage_model.Inventory) *storage_model.Inventory {
+	inventoryProducts []*storage_model.Inventory,
+) *storage_model.Inventory {
 	for _, product := range inventoryProducts {
 		if product.ProductId == recipeProduct.ProductId && product.AmountType == recipeProduct.AmountType {
 			return product
