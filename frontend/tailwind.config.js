@@ -14,7 +14,7 @@ module.exports = {
         'navbar-link': {
           active: '#008080',
         },
-        'navbar': '#001f3f',
+        navbar: '#001f3f',
       },
       colors: {
         transparent: '#00000000',
@@ -28,6 +28,7 @@ module.exports = {
         },
         orange: {
           main: '#FF845E',
+          disabled: '#F7C390',
         },
         red: {
           secondary: '#D34E24',
@@ -121,6 +122,9 @@ module.exports = {
         136: '34rem', // 544 px
       },
     },
+  },
+  variants: {
+    opacity: ({ after }) => after(['disabled']),
   },
   plugins: [],
 };
