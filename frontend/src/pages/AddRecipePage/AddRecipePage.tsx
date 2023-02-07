@@ -7,6 +7,10 @@ import Button from '../../components/Button';
 import DataFetcher from '../../components/DataFetcher/DataFetcher';
 import SelectInput from '../../components/SelectInput';
 
+import { requestApi } from '../../config/api';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 interface RecipeForm {
   name: string;
   description: string;
@@ -30,6 +34,8 @@ interface ProductRaw {
 }
 
 const AddRecipePage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -53,12 +59,13 @@ const AddRecipePage: React.FC = () => {
         return {
           product_id: product.product_id,
           amount: parseFloat(product.amount),
-          amount_type: product.amount_type,
+          amount_type: 'g',
         };
       }),
     };
 
-    console.log(recipeData);
+    axios.post('http://localhost:8000/recipe', recipeData, { withCredentials: true });
+    navigate('/recipe');
   };
 
   const addInstruction = (values: RecipeForm) => {
@@ -95,8 +102,14 @@ const AddRecipePage: React.FC = () => {
   };
 
   const findAmountType = (products: ProductRaw[], id: string) => {
-    console.log(products.filter((product) => product.id === id)[0]?.amount_type);
     return products.filter((product) => product.id === id)[0]?.amount_type || '';
+  };
+
+  const formatUnits = (unit: string) => {
+    if (unit.length) {
+      return `(in ${unit})`;
+    }
+    return '';
   };
 
   return (
@@ -110,7 +123,7 @@ const AddRecipePage: React.FC = () => {
           enableReinitialize={true}
           validateOnMount
         >
-          {({ isSubmitting, isValid, values }) => (
+          {({ isSubmitting, isValid, values, setFieldValue }) => (
             <Form>
               <div className='space-y-6'>
                 <Field
@@ -182,18 +195,28 @@ const AddRecipePage: React.FC = () => {
                                 name={`products.${index}.product_id`}
                                 placeholder={'e.g. Sugar'}
                                 label='Product'
+                                onChange={() =>
+                                  setFieldValue(
+                                    `products.${index}.amount_type`,
+                                    findAmountType(products, product.product_id),
+                                  )
+                                }
                               />
                               <Field
                                 id={`products.${index}.amount`}
                                 component={TextInput}
                                 name={`products.${index}.amount`}
                                 placeholder={'e.g. 2'}
-                                label={'Amount of product (in ' + findAmountType(products) + ')'}
+                                label={
+                                  'Amount of product ' +
+                                  formatUnits(findAmountType(products, product.product_id))
+                                }
                               />
-                              <Button
-                                type='button'
-                                label='hhohohooh'
-                                onClick={() => console.log(products)}
+                              <Field
+                                id={`products.${index}.amount_type`}
+                                component={TextInput}
+                                name={`products.${index}.amount_type`}
+                                hidden={true}
                               />
                             </div>
                           );

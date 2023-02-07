@@ -16,4 +16,15 @@ export const RecipeSchema = yup.object().shape({
     .typeError('Cooking time must be a number')
     .required('Please provide a cooking time duration')
     .min(0, 'Cooking time should be more than or equal to 0'),
+  instructions: yup.array().of(yup.string().required('Please provide a step description')),
+  products: yup.array().of(
+    yup.object({
+      product_id: yup.string().required('Please choose a product'),
+      amount: yup
+        .number()
+        .typeError('Amount must be a number')
+        .required('Please provide amount of a product')
+        .min(0),
+    }),
+  ),
 });
