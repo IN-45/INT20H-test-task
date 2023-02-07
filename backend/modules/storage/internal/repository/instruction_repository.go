@@ -3,36 +3,30 @@ package repository
 import (
 	"context"
 
-	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
-	customerrors "github.com/IN-45/INT20H-test-task/pkg/customerrors"
-	"github.com/google/uuid"
+	"github.com/IN-45/INT20H-test-task/pkg/db"
 
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/driver/pgdriver"
+	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
+	"github.com/google/uuid"
 )
 
 type InstructionRepository struct {
-	db *bun.DB
+	db *db.TransactionRepository
 }
 
-func NewInstructionRepository(db *bun.DB) *InstructionRepository {
+func NewInstructionRepository(db *db.TransactionRepository) *InstructionRepository {
 	return &InstructionRepository{db: db}
 }
 
-func (r *InstructionRepository) AddInstructions(ctx context.Context, instructions []storage_model.Instruction) error {
-	_, err := r.db.NewInsert().Model(&instructions).Exec(ctx)
-
-	if e, ok := err.(pgdriver.Error); ok && e.IntegrityViolation() {
-		return customerrors.NewAlreadyExistsError("recipe already exists")
-	}
+func (r *InstructionRepository) Create(ctx context.Context, instructions []storage_model.Instruction) error {
+	_, err := r.db.NewInsert(ctx).Model(&instructions).Exec(ctx)
 
 	return err
 }
 
-func (r *InstructionRepository) GetInstructionsById(ctx context.Context, id uuid.UUID) ([]*storage_model.Instruction, error) {
+func (r *InstructionRepository) GetByRecipeId(ctx context.Context, id uuid.UUID) ([]*storage_model.Instruction, error) {
 	var instructions []*storage_model.Instruction
 
-	err := r.db.NewSelect().
+	err := r.db.NewSelect(ctx).
 		Model(&instructions).
 		Where("recipe_id = ?", id).
 		Scan(ctx)

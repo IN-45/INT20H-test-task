@@ -7,5 +7,7 @@ import (
 var Module = fx.Options(
 	fx.Provide(
 		NewDB,
+		NewTransactionManager,
+		NewTransactionRepository,
 	),
 )
