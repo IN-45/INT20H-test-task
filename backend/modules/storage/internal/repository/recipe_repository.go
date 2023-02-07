@@ -55,8 +55,24 @@ func (r *RecipeRepository) GetProductsForRecipe(ctx context.Context, recipeId uu
 
 	err := r.db.NewSelect().
 		Model(&products).
+		Where("recipe_id = ?", recipeId).
 		Relation("Product").
 		Scan(ctx)
 
 	return products, err
+}
+
+func (r *RecipeRepository) GetRecipeById(ctx context.Context, recipeId uuid.UUID) (*storage_model.Recipe, error) {
+	recipe := new(storage_model.Recipe)
+
+	err := r.db.NewSelect().
+		Model(recipe).
+		Where("id = ?", recipeId).
+		Scan(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return recipe, nil
 }
