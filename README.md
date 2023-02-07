@@ -1,5 +1,8 @@
 # INT20H test task
 
+### Project link
+http://34.118.100.129/
+
 ### Deployment
 
 ```bash
