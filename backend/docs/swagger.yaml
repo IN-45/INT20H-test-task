@@ -180,6 +180,26 @@ info:
   contact: {}
   title: Backend API
 paths:
+  /amount_types:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get amount types for products
+      tags:
+      - Product
   /categories:
     get:
       responses:
@@ -398,6 +418,32 @@ paths:
           schema:
             $ref: '#/definitions/fiber.Error'
       summary: Create recipe and add products and instructions
+      tags:
+      - Recipe
+  /recipe/{id}:
+    get:
+      parameters:
+      - description: Recipe ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Error'
+      summary: Get recipe by id
       tags:
       - Recipe
   /sign-in:
