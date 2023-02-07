@@ -6,6 +6,7 @@ import (
 	_ "github.com/IN-45/INT20H-test-task/pkg/customerrors"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 type RecipeHandler struct {
@@ -32,6 +33,7 @@ func NewRecipeHandler(
 func RegisterRecipeHandler(app *fiber.App, h *RecipeHandler) {
 	app.Post("/recipe", h.Create)
 	app.Get("/recipe", h.GetAll)
+	app.Get("/recipe/:id", h.GetRecipeById)
 }
 
 // Create
@@ -51,12 +53,12 @@ func (h *RecipeHandler) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	user_id := ctx.Cookies("user_id")
-	if user_id == "" {
+	userId := ctx.Cookies("user_id")
+	if userId == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	dto.AuthorId = user_id
+	dto.AuthorId = userId
 
 	if err := h.validator.Struct(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
@@ -85,6 +87,38 @@ func (h *RecipeHandler) GetAll(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(recipes)
+}
+
+// GetRecipeById
+//
+//	@Summary	Get recipe by id
+//	@Tags		Recipe
+//	@Param		id	path		string	true	"Recipe ID"
+//	@Success	200	{array}		storage_service.DtoRecipe
+//	@Failure	401	{object}	customerrors.UnauthorizedError
+//	@Failure	500	{object}	fiber.Error
+//	@Router		/recipe/{id} [get]
+func (h *RecipeHandler) GetRecipeById(ctx *fiber.Ctx) error {
+	dto := new(dtoGetRecipeById)
+
+	if err := ctx.ParamsParser(dto); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	if err := h.validator.Struct(dto); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	recipe, err := h.recipeService.GetRecipeById(ctx.Context(), uuid.MustParse(dto.Id))
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(recipe)
+}
+
+type dtoGetRecipeById struct {
+	Id string `params:"id" validate:"required,uuid4"`
 }
 
 type dtoCreateRecipesProducts struct {

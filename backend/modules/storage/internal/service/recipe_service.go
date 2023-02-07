@@ -98,50 +98,67 @@ func (s *RecipeService) GetAllRecipes(ctx context.Context) ([]DtoRecipe, error) 
 	}
 
 	for _, recipe := range recipes {
-		// get instructions for current recipe
-		instructions, err := s.instructionRepository.GetInstructionsById(ctx, recipe.Id)
+		dtoRecipe, err := s.fillDtoRecipe(ctx, recipe)
 		if err != nil {
 			return nil, err
 		}
-		var dtoInstructions []dtoInstruction
-		for _, instruction := range instructions {
-			dtoInstructions = append(dtoInstructions, dtoInstruction{
-				Description: instruction.Description,
-				Priority:    instruction.Priority,
-			})
-		}
 
-		// get products for current recipe
-		recipeProducts, err := s.recipeRepository.GetProductsForRecipe(ctx, recipe.Id)
-		if err != nil {
-			return nil, err
-		}
-		var dtoProducts []dtoProduct
-		for _, product := range recipeProducts {
-			dtoProducts = append(dtoProducts, dtoProduct{
-				ProductId:  product.ProductId,
-				Name:       product.Product.Name,
-				Amount:     product.Amount,
-				AmountType: product.AmountType,
-				ImageURL:   product.Product.ImageURL,
-				CategoryId: product.Product.CategoryId,
-			})
-
-		}
-
-		dtoRecipes = append(dtoRecipes, DtoRecipe{
-			Id:                 recipe.Id,
-			Name:               recipe.Name,
-			Description:        recipe.Description,
-			AuthorId:           recipe.AuthorId,
-			CookingTimeMinutes: recipe.CookingTimeMinutes,
-			ImageURL:           recipe.ImageURL,
-			Instructions:       dtoInstructions,
-			Products:           dtoProducts,
-		})
+		dtoRecipes = append(dtoRecipes, *dtoRecipe)
 	}
 
 	return dtoRecipes, nil
+}
+
+func (s *RecipeService) GetRecipeById(ctx context.Context, id uuid.UUID) (*DtoRecipe, error) {
+	recipe, err := s.recipeRepository.GetRecipeById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.fillDtoRecipe(ctx, recipe)
+}
+
+func (s *RecipeService) fillDtoRecipe(ctx context.Context, recipe *storage_model.Recipe) (*DtoRecipe, error) {
+	dtoRecipe := new(DtoRecipe)
+	// get instructions for current recipe
+	instructions, err := s.instructionRepository.GetInstructionsById(ctx, recipe.Id)
+	if err != nil {
+		return nil, err
+	}
+	var dtoInstructions []dtoInstruction
+	for _, instruction := range instructions {
+		dtoInstructions = append(dtoInstructions, dtoInstruction{
+			Description: instruction.Description,
+			Priority:    instruction.Priority,
+		})
+	}
+	// get products for current recipe
+	recipeProducts, err := s.recipeRepository.GetProductsForRecipe(ctx, recipe.Id)
+	if err != nil {
+		return nil, err
+	}
+	var dtoProducts []dtoProduct
+	for _, product := range recipeProducts {
+		dtoProducts = append(dtoProducts, dtoProduct{
+			ProductId:  product.ProductId,
+			Name:       product.Product.Name,
+			Amount:     product.Amount,
+			AmountType: product.AmountType,
+			ImageURL:   product.Product.ImageURL,
+			CategoryId: product.Product.CategoryId,
+		})
+	}
+
+	dtoRecipe.Id = recipe.Id
+	dtoRecipe.Name = recipe.Name
+	dtoRecipe.Description = recipe.Description
+	dtoRecipe.AuthorId = recipe.AuthorId
+	dtoRecipe.CookingTimeMinutes = recipe.CookingTimeMinutes
+	dtoRecipe.ImageURL = recipe.ImageURL
+	dtoRecipe.Instructions = dtoInstructions
+	dtoRecipe.Products = dtoProducts
+
+	return dtoRecipe, nil
 }
 
 type dtoInstruction struct {
