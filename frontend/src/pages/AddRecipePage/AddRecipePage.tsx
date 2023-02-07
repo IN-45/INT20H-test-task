@@ -65,7 +65,7 @@ const AddRecipePage: React.FC = () => {
     };
 
     axios.post('http://localhost:8000/recipe', recipeData, { withCredentials: true });
-    navigate('/recipe');
+    navigate('/recipes');
   };
 
   const addInstruction = (values: RecipeForm) => {
@@ -211,12 +211,6 @@ const AddRecipePage: React.FC = () => {
                                   'Amount of product ' +
                                   formatUnits(findAmountType(products, product.product_id))
                                 }
-                              />
-                              <Field
-                                id={`products.${index}.amount_type`}
-                                component={TextInput}
-                                name={`products.${index}.amount_type`}
-                                hidden={true}
                               />
                             </div>
                           );
