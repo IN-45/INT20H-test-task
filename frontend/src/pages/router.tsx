@@ -2,9 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../features/layout/RootLayout';
 import Products from './Products/Products';
 import SignPage from './Sign/SignPage';
-
 import NotFound from './NotFound';
 import RecipePage from './RecipePage';
+import AddRecipePage from './AddRecipePage';
 import Recipes from './Recipes/Recipes';
 
 const router = createBrowserRouter([
@@ -17,8 +17,17 @@ const router = createBrowserRouter([
         element: <Products />,
       },
       {
-        path: 'recipe/:id',
-        element: <RecipePage />,
+        path: 'recipe',
+        children: [
+          {
+            path: 'new',
+            element: <AddRecipePage />,
+          },
+          {
+            path: ':id',
+            element: <RecipePage />,
+          },
+        ],
       },
       {
         path: 'recipe',
