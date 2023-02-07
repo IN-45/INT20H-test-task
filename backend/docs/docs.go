@@ -122,6 +122,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/filter-recipes": {
+            "get": {
+                "tags": [
+                    "Recipe"
+                ],
+                "summary": "Get filter recipes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/inventory": {
             "get": {
                 "tags": [
@@ -560,6 +591,41 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "cooking_time_minutes": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct"
+                    }
+                }
+            }
+        },
         "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe": {
             "type": "object",
             "properties": {
@@ -592,6 +658,32 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct"
                     }
+                }
+            }
+        },
+        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "missed_amount": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
                 }
             }
         },

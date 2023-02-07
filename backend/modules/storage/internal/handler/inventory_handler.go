@@ -41,12 +41,12 @@ func RegisterInventoryHandler(app *fiber.App, h *InventoryHandler) {
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/inventory [get]
 func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
-	user_id := ctx.Cookies("user_id")
-	if user_id == "" {
+	userId := ctx.Cookies("user_id")
+	if userId == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	inventories, err := h.inventoryRepository.GetAllInventoryProducts(ctx.Context(), uuid.MustParse(user_id))
+	inventories, err := h.inventoryRepository.GetAllInventoryProducts(ctx.Context(), uuid.MustParse(userId))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -54,7 +54,7 @@ func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
 	return ctx.JSON(mapDtoInventories(inventories))
 }
 
-// AddProductToInventory
+// Create
 //
 //	@Summary	Add product to inventory
 //	@Tags		Inventory
