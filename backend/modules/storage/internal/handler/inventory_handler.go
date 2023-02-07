@@ -28,11 +28,11 @@ func NewInventoryHandler(
 }
 
 func RegisterInventoryHandler(app *fiber.App, h *InventoryHandler) {
-	app.Post("/inventory", h.Create)
-	app.Get("/inventory", h.GetAllInventoryProducts)
+	app.Post("/inventory", h.AddProduct)
+	app.Get("/inventory", h.GetProducts)
 }
 
-// GetAllInventoryProducts
+// GetProducts
 //
 //	@Summary	Get all inventory products
 //	@Tags		Inventory
@@ -40,13 +40,13 @@ func RegisterInventoryHandler(app *fiber.App, h *InventoryHandler) {
 //	@Failure	401	{object}	customerrors.UnauthorizedError
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/inventory [get]
-func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
+func (h *InventoryHandler) GetProducts(ctx *fiber.Ctx) error {
 	userId := ctx.Cookies("user_id")
 	if userId == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	inventories, err := h.inventoryRepository.GetAllInventoryProducts(ctx.Context(), uuid.MustParse(userId))
+	inventories, err := h.inventoryRepository.GetExistingProducts(ctx.Context(), uuid.MustParse(userId))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
@@ -54,7 +54,7 @@ func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
 	return ctx.JSON(mapDtoInventories(inventories))
 }
 
-// Create
+// AddProduct
 //
 //	@Summary	Add product to inventory
 //	@Tags		Inventory
@@ -64,19 +64,19 @@ func (h *InventoryHandler) GetAllInventoryProducts(ctx *fiber.Ctx) error {
 //	@Failure	401		{object}	customerrors.UnauthorizedError
 //	@Failure	500		{object}	fiber.Error
 //	@Router		/inventory [post]
-func (h *InventoryHandler) Create(ctx *fiber.Ctx) error {
+func (h *InventoryHandler) AddProduct(ctx *fiber.Ctx) error {
 	dto := new(dtoCreateInventory)
 
 	if err := ctx.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	user_id := ctx.Cookies("user_id")
-	if user_id == "" {
+	userId := ctx.Cookies("user_id")
+	if userId == "" {
 		return fiber.NewError(fiber.StatusBadRequest, "user id not found")
 	}
 
-	dto.UserId = user_id
+	dto.UserId = userId
 
 	if err := h.validator.Struct(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
@@ -87,7 +87,7 @@ func (h *InventoryHandler) Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON("created")
+	return nil
 }
 
 type dtoCreateInventory struct {

@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
+	"sort"
+
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
 	"github.com/google/uuid"
-	"sort"
 )
 
 type FilterRecipesService struct {
@@ -22,58 +23,54 @@ func NewFilterRecipesService(
 	}
 }
 
-func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UUID) ([]DtoFilterRecipe, error) {
+func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UUID) ([]*FilterRecipe, error) {
 	recipes, err := f.recipeService.GetAllRecipes(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	inventoryProducts, err := f.inventoryService.inventoryRepository.GetAllInventoryProducts(ctx, userId)
+	inventoryProducts, err := f.inventoryService.inventoryRepository.GetExistingProducts(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
 
-	var dtoFilterRecipes []DtoFilterRecipe
+	var filterRecipes []*FilterRecipe
 
 	for _, recipe := range recipes {
-		var filterProducts []dtoFilterProduct
+		var filterProducts []*FilterProduct
 		for _, recipeProduct := range recipe.Products {
 			missedAmount := 0
-			inventoryProduct := f.findInInventory(&recipeProduct, inventoryProducts)
+			inventoryProduct := f.findInInventory(recipeProduct, inventoryProducts)
 			if inventoryProduct == nil {
 				missedAmount = recipeProduct.Amount
 			} else if inventoryProduct.Amount < recipeProduct.Amount {
 				missedAmount = recipeProduct.Amount - inventoryProduct.Amount
 			}
-			filterProducts = append(filterProducts, dtoFilterProduct{
+			filterProducts = append(filterProducts, &FilterProduct{
 				ProductId:    recipeProduct.ProductId,
-				Name:         recipeProduct.Name,
+				Name:         recipeProduct.Product.Name,
 				Amount:       recipeProduct.Amount,
 				MissedAmount: missedAmount,
 				AmountType:   recipeProduct.AmountType,
-				ImageURL:     recipeProduct.ImageURL,
-				CategoryId:   recipeProduct.CategoryId,
+				ImageURL:     recipeProduct.Product.ImageURL,
+				CategoryId:   recipeProduct.Product.CategoryId,
 			})
 		}
 
-		dtoFilterRecipes = append(dtoFilterRecipes, DtoFilterRecipe{
-			Id:                 recipe.Id,
-			Name:               recipe.Name,
-			Description:        recipe.Description,
-			AuthorId:           recipe.AuthorId,
-			CookingTimeMinutes: recipe.CookingTimeMinutes,
-			ImageURL:           recipe.ImageURL,
-			Instructions:       recipe.Instructions,
-			Products:           filterProducts,
+		filterRecipes = append(filterRecipes, &FilterRecipe{
+			Recipe:       recipe.Recipe,
+			Instructions: recipe.Instructions,
+			Products:     filterProducts,
 		})
 	}
 
-	return f.sort(dtoFilterRecipes), nil
+	return f.sort(filterRecipes), nil
 }
 
 func (f *FilterRecipesService) findInInventory(
-	recipeProduct *dtoProduct,
-	inventoryProducts []*storage_model.Inventory) *storage_model.Inventory {
+	recipeProduct *storage_model.RecipeProducts,
+	inventoryProducts []*storage_model.Inventory,
+) *storage_model.Inventory {
 	for _, product := range inventoryProducts {
 		if product.ProductId == recipeProduct.ProductId && product.AmountType == recipeProduct.AmountType {
 			return product
@@ -82,7 +79,7 @@ func (f *FilterRecipesService) findInInventory(
 	return nil
 }
 
-func (f *FilterRecipesService) sort(recipes []DtoFilterRecipe) []DtoFilterRecipe {
+func (f *FilterRecipesService) sort(recipes []*FilterRecipe) []*FilterRecipe {
 	sort.Slice(recipes, func(i, j int) bool {
 		sumI := 0
 		sumJ := 0
@@ -103,7 +100,7 @@ func (f *FilterRecipesService) sort(recipes []DtoFilterRecipe) []DtoFilterRecipe
 	return recipes
 }
 
-type dtoFilterProduct struct {
+type FilterProduct struct {
 	ProductId    uuid.UUID `json:"product_id"`
 	Name         string    `json:"name"`
 	Amount       int       `json:"amount"`
@@ -113,13 +110,8 @@ type dtoFilterProduct struct {
 	CategoryId   uuid.UUID `json:"category_id"`
 }
 
-type DtoFilterRecipe struct {
-	Id                 uuid.UUID          `json:"id"`
-	Name               string             `json:"name"`
-	Description        string             `json:"description"`
-	AuthorId           uuid.UUID          `json:"author_id"`
-	CookingTimeMinutes int                `json:"cooking_time_minutes"`
-	ImageURL           string             `json:"image_url"`
-	Instructions       []dtoInstruction   `json:"instructions"`
-	Products           []dtoFilterProduct `json:"products"`
+type FilterRecipe struct {
+	Recipe       *storage_model.Recipe
+	Instructions []*storage_model.Instruction
+	Products     []*FilterProduct
 }

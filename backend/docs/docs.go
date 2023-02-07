@@ -122,37 +122,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/filter-recipes": {
-            "get": {
-                "tags": [
-                    "Recipe"
-                ],
-                "summary": "Get filter recipes",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/fiber.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/inventory": {
             "get": {
                 "tags": [
@@ -355,7 +324,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe"
+                                "$ref": "#/definitions/modules_storage_internal_handler.dtoRecipe"
                             }
                         }
                     },
@@ -438,7 +407,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe"
+                                "$ref": "#/definitions/modules_storage_internal_handler.dtoRecipe"
                             }
                         }
                     },
@@ -591,136 +560,6 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe": {
-            "type": "object",
-            "properties": {
-                "author_id": {
-                    "type": "string"
-                },
-                "cooking_time_minutes": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "instructions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct"
-                    }
-                }
-            }
-        },
-        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe": {
-            "type": "object",
-            "properties": {
-                "author_id": {
-                    "type": "string"
-                },
-                "cooking_time_minutes": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "instructions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct"
-                    }
-                }
-            }
-        },
-        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "integer"
-                },
-                "amount_type": {
-                    "type": "string"
-                },
-                "category_id": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "missed_amount": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "product_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "priority": {
-                    "type": "integer"
-                }
-            }
-        },
-        "github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "integer"
-                },
-                "amount_type": {
-                    "type": "string"
-                },
-                "category_id": {
-                    "type": "string"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "product_id": {
-                    "type": "string"
-                }
-            }
-        },
         "github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError": {
             "type": "object"
         },
@@ -825,12 +664,12 @@ const docTemplate = `{
                 "products": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateRecipesProducts"
+                        "$ref": "#/definitions/modules_storage_internal_handler.dtoCreateRecipeProducts"
                     }
                 }
             }
         },
-        "modules_storage_internal_handler.dtoCreateRecipesProducts": {
+        "modules_storage_internal_handler.dtoCreateRecipeProducts": {
             "type": "object",
             "required": [
                 "amount",
@@ -846,6 +685,17 @@ const docTemplate = `{
                 },
                 "product_id": {
                     "type": "string"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoInstruction": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
                 }
             }
         },
@@ -879,6 +729,64 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoRecipe": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "string"
+                },
+                "cooking_time_minutes": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modules_storage_internal_handler.dtoInstruction"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/modules_storage_internal_handler.dtoRecipeProduct"
+                    }
+                }
+            }
+        },
+        "modules_storage_internal_handler.dtoRecipeProduct": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "amount_type": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "product_id": {
                     "type": "string"
                 }
             }

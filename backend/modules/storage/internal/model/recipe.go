@@ -35,7 +35,7 @@ func NewRecipe(
 	}
 }
 
-type RecipesProducts struct {
+type RecipeProducts struct {
 	RecipeId uuid.UUID
 	Recipe   *Recipe `bun:"rel:belongs-to"`
 
@@ -46,13 +46,13 @@ type RecipesProducts struct {
 	AmountType string
 }
 
-func NewRecipesProducts(
+func NewRecipeProducts(
 	recipeId uuid.UUID,
 	productId uuid.UUID,
 	amount int,
 	amountType string,
-) *RecipesProducts {
-	return &RecipesProducts{
+) *RecipeProducts {
+	return &RecipeProducts{
 		RecipeId:   recipeId,
 		ProductId:  productId,
 		Amount:     amount,
