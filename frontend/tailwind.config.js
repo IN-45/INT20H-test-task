@@ -7,11 +7,13 @@ module.exports = {
       fontFamily: {
         'open-sans': ['Open Sans', 'sans-serif'],
       },
+      boxShadow: {
+        'main-box-shadow': '0px 4px 16px rgba(29, 101, 137, 0.15)',
+      },
       backgroundColor: {
-        'navbar-link':
-          {
-            'active': '#008080',
-          },
+        'navbar-link': {
+          active: '#008080',
+        },
         navbar: '#001f3f',
       },
       colors: {
@@ -20,11 +22,24 @@ module.exports = {
           main: '#2D2727',
           secondary: '#393333',
         },
+        grey: {
+          greyscale: '#909590',
+          'greyscale-2': '#D4D5D4',
+        },
         orange: {
           main: '#FF845E',
         },
+        red: {
+          secondary: '#D34E24',
+        },
+        white: {
+          greyscale: '#FFFFFF',
+          disabled: '#F2F2F2',
+        },
+        chosen: '#F2F5F7',
       },
       fontSize: {
+        '2xs': ['13px', '20px'],
         sm: ['12px', '15px'],
         md: ['16px', '20px'],
         lg: ['20px', '30px'],
