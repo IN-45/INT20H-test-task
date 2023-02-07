@@ -14,7 +14,7 @@ module.exports = {
         'navbar-link': {
           active: '#008080',
         },
-        navbar: '#001f3f',
+        'navbar': '#001f3f',
       },
       colors: {
         transparent: '#00000000',

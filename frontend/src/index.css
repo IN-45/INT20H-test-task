@@ -6,18 +6,22 @@
   body {
     @apply font-open-sans text-black-main;
   }
+
   svg * {
     @apply stroke-inherit fill-current;
   }
+
   h1,
   h2,
   h3,
   h4 {
     @apply font-bold;
   }
+
   h1 {
     @apply text-[25px] leading-[32px];
   }
+
   h4 {
     @apply text-[18px] leading-[22px];
   }
