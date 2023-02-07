@@ -26,10 +26,10 @@ const DataFetcher: FC<DataFetcherProps> = ({ children, url }) => {
         setState('ready');
       })
       .catch((err) => {
+        setError(err.response);
         setState('error');
-        setError(err);
       });
-  }, []);
+  }, [url]);
 
   return (
     <StateResolver state={state} empty={data === null || data?.length === 0} error={error}>
