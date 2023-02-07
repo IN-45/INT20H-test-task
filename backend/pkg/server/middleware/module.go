@@ -19,7 +19,12 @@ var Module = fx.Options(
 		validatorMiddleware *tokenValidatorMiddleware,
 	) {
 		server.Use(
-			cors.New(),
+			cors.New(cors.Config{
+				AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
+				AllowOrigins:     "*",
+				AllowCredentials: true,
+				AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+			}),
 			logger.New(),
 			skip.New(validatorMiddleware.validateToken, func(ctx *fiber.Ctx) bool {
 				path := ctx.Path()
