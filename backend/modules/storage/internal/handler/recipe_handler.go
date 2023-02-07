@@ -33,7 +33,7 @@ func NewRecipeHandler(
 func RegisterRecipeHandler(app *fiber.App, h *RecipeHandler) {
 	app.Post("/recipe", h.Create)
 	app.Get("/recipe", h.GetAll)
-	app.Get("/recipe/:id", h.GetRecipeById)
+	app.Get("/recipe/:id", h.GetById)
 }
 
 // Create
@@ -76,7 +76,7 @@ func (h *RecipeHandler) Create(ctx *fiber.Ctx) error {
 //
 //	@Summary	Get all recipes
 //	@Tags		Recipe
-//	@Success	200	{array}		storage_service.DtoRecipe
+//	@Success	200	{array}		dtoRecipe
 //	@Failure	401	{object}	customerrors.UnauthorizedError
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/recipe [get]
@@ -86,19 +86,19 @@ func (h *RecipeHandler) GetAll(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON(recipes)
+	return ctx.JSON(mapServiceRecipesToDto(recipes))
 }
 
-// GetRecipeById
+// GetById
 //
 //	@Summary	Get recipe by id
 //	@Tags		Recipe
 //	@Param		id	path		string	true	"Recipe ID"
-//	@Success	200	{array}		storage_service.DtoRecipe
+//	@Success	200	{array}		dtoRecipe
 //	@Failure	401	{object}	customerrors.UnauthorizedError
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/recipe/{id} [get]
-func (h *RecipeHandler) GetRecipeById(ctx *fiber.Ctx) error {
+func (h *RecipeHandler) GetById(ctx *fiber.Ctx) error {
 	dto := new(dtoGetRecipeById)
 
 	if err := ctx.ParamsParser(dto); err != nil {
@@ -109,19 +109,19 @@ func (h *RecipeHandler) GetRecipeById(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	recipe, err := h.recipeService.GetRecipeById(ctx.Context(), uuid.MustParse(dto.Id))
+	recipe, err := h.recipeService.GetById(ctx.Context(), uuid.MustParse(dto.Id))
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON(recipe)
+	return ctx.JSON(mapServiceRecipeToDto(recipe))
 }
 
 type dtoGetRecipeById struct {
 	Id string `params:"id" validate:"required,uuid4"`
 }
 
-type dtoCreateRecipesProducts struct {
+type dtoCreateRecipeProducts struct {
 	ProductId  string `json:"product_id" validate:"required,uuid4"`
 	Amount     int    `json:"amount" validate:"required"`
 	AmountType string `json:"amount_type" validate:"required"`
@@ -133,11 +133,36 @@ type dtoCreateInstruction struct {
 }
 
 type dtoCreateRecipe struct {
-	Name               string                     `json:"name" validate:"required"`
-	Description        string                     `json:"description"`
-	AuthorId           string                     `json:"-" validate:"uuid4"`
-	CookingTimeMinutes int                        `json:"cooking_time_minutes"`
-	ImageURL           string                     `json:"image_url"`
-	Instructions       []dtoCreateInstruction     `json:"instructions,omitempty"`
-	Products           []dtoCreateRecipesProducts `json:"products,omitempty"`
+	Name               string                    `json:"name" validate:"required"`
+	Description        string                    `json:"description"`
+	AuthorId           string                    `json:"-" validate:"uuid4"`
+	CookingTimeMinutes int                       `json:"cooking_time_minutes"`
+	ImageURL           string                    `json:"image_url"`
+	Instructions       []dtoCreateInstruction    `json:"instructions,omitempty"`
+	Products           []dtoCreateRecipeProducts `json:"products,omitempty"`
+}
+
+type dtoInstruction struct {
+	Description string `json:"description"`
+	Priority    int    `json:"priority"`
+}
+
+type dtoRecipeProduct struct {
+	ProductId  uuid.UUID `json:"product_id"`
+	Name       string    `json:"name"`
+	Amount     int       `json:"amount"`
+	AmountType string    `json:"amount_type"`
+	ImageURL   string    `json:"image_url"`
+	CategoryId uuid.UUID `json:"category_id"`
+}
+
+type dtoRecipe struct {
+	Id                 uuid.UUID           `json:"id"`
+	Name               string              `json:"name"`
+	Description        string              `json:"description"`
+	AuthorId           uuid.UUID           `json:"author_id"`
+	CookingTimeMinutes int                 `json:"cooking_time_minutes"`
+	ImageURL           string              `json:"image_url"`
+	Instructions       []*dtoInstruction   `json:"instructions"`
+	Products           []*dtoRecipeProduct `json:"products"`
 }

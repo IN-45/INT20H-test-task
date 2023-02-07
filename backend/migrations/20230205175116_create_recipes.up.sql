@@ -20,7 +20,7 @@ CREATE TABLE instructions (
 );
 --bun:split
 
-CREATE TABLE recipes_products(
+CREATE TABLE recipe_products(
     "recipe_id" uuid,
     "product_id" uuid,
     "amount" int,

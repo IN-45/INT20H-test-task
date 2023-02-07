@@ -77,10 +77,11 @@ func (h *ProductHandler) GetById(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(&dtoProduct{
-		Id:       product.Id,
-		Name:     product.Name,
-		Category: product.Category.Name,
-		ImageURL: product.ImageURL,
+		Id:         product.Id,
+		Name:       product.Name,
+		Category:   product.Category.Name,
+		ImageURL:   product.ImageURL,
+		AmountType: product.AmountType,
 	})
 }
 
@@ -122,8 +123,7 @@ func (h *ProductHandler) Create(ctx *fiber.Ctx) error {
 //	@Failure	500	{object}	fiber.Error
 //	@Router		/amount_types [get]
 func (h *ProductHandler) GetAmountTypes(ctx *fiber.Ctx) error {
-	amountTypes, err := h.productRepository.GetAmountTypes()
-
+	amountTypes, err := h.productRepository.GetAmountTypes(ctx.Context())
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}

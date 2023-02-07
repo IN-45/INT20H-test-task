@@ -7,91 +7,6 @@ definitions:
       message:
         type: string
     type: object
-  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe:
-    properties:
-      author_id:
-        type: string
-      cooking_time_minutes:
-        type: integer
-      description:
-        type: string
-      id:
-        type: string
-      image_url:
-        type: string
-      instructions:
-        items:
-          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction'
-        type: array
-      name:
-        type: string
-      products:
-        items:
-          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct'
-        type: array
-    type: object
-  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe:
-    properties:
-      author_id:
-        type: string
-      cooking_time_minutes:
-        type: integer
-      description:
-        type: string
-      id:
-        type: string
-      image_url:
-        type: string
-      instructions:
-        items:
-          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction'
-        type: array
-      name:
-        type: string
-      products:
-        items:
-          $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct'
-        type: array
-    type: object
-  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoFilterProduct:
-    properties:
-      amount:
-        type: integer
-      amount_type:
-        type: string
-      category_id:
-        type: string
-      image_url:
-        type: string
-      missed_amount:
-        type: integer
-      name:
-        type: string
-      product_id:
-        type: string
-    type: object
-  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoInstruction:
-    properties:
-      description:
-        type: string
-      priority:
-        type: integer
-    type: object
-  github_com_IN-45_INT20H-test-task_modules_storage_internal_service.dtoProduct:
-    properties:
-      amount:
-        type: integer
-      amount_type:
-        type: string
-      category_id:
-        type: string
-      image_url:
-        type: string
-      name:
-        type: string
-      product_id:
-        type: string
-    type: object
   github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError:
     type: object
   modules_storage_internal_handler.dtoCategory:
@@ -158,12 +73,12 @@ definitions:
         type: string
       products:
         items:
-          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateRecipesProducts'
+          $ref: '#/definitions/modules_storage_internal_handler.dtoCreateRecipeProducts'
         type: array
     required:
     - name
     type: object
-  modules_storage_internal_handler.dtoCreateRecipesProducts:
+  modules_storage_internal_handler.dtoCreateRecipeProducts:
     properties:
       amount:
         type: integer
@@ -175,6 +90,13 @@ definitions:
     - amount
     - amount_type
     - product_id
+    type: object
+  modules_storage_internal_handler.dtoInstruction:
+    properties:
+      description:
+        type: string
+      priority:
+        type: integer
     type: object
   modules_storage_internal_handler.dtoInventory:
     properties:
@@ -196,6 +118,44 @@ definitions:
       image_url:
         type: string
       name:
+        type: string
+    type: object
+  modules_storage_internal_handler.dtoRecipe:
+    properties:
+      author_id:
+        type: string
+      cooking_time_minutes:
+        type: integer
+      description:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      instructions:
+        items:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoInstruction'
+        type: array
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/modules_storage_internal_handler.dtoRecipeProduct'
+        type: array
+    type: object
+  modules_storage_internal_handler.dtoRecipeProduct:
+    properties:
+      amount:
+        type: integer
+      amount_type:
+        type: string
+      category_id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+      product_id:
         type: string
     type: object
   modules_storage_internal_handler.dtoUploadedFile:
@@ -289,26 +249,6 @@ paths:
       summary: Create new category
       tags:
       - Category
-  /filter-recipes:
-    get:
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoFilterRecipe'
-            type: array
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/github_com_IN-45_INT20H-test-task_pkg_customerrors.UnauthorizedError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/fiber.Error'
-      summary: Get filter recipes
-      tags:
-      - Recipe
   /inventory:
     get:
       responses:
@@ -439,7 +379,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe'
+              $ref: '#/definitions/modules_storage_internal_handler.dtoRecipe'
             type: array
         "401":
           description: Unauthorized
@@ -493,7 +433,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_IN-45_INT20H-test-task_modules_storage_internal_service.DtoRecipe'
+              $ref: '#/definitions/modules_storage_internal_handler.dtoRecipe'
             type: array
         "401":
           description: Unauthorized

@@ -2,7 +2,7 @@ package handler
 
 import (
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
-	"github.com/IN-45/INT20H-test-task/modules/storage/internal/service"
+	storage_service "github.com/IN-45/INT20H-test-task/modules/storage/internal/service"
 	"github.com/google/uuid"
 )
 
@@ -22,8 +22,8 @@ func mapDtoProducts(products []*storage_model.Product) []*dtoProduct {
 	return dtoProducts
 }
 
-func createProductParams(dto *dtoCreateProduct) service.ProductParams {
-	return service.ProductParams{
+func createProductParams(dto *dtoCreateProduct) storage_service.ProductParams {
+	return storage_service.ProductParams{
 		Name:       dto.Name,
 		CategoryId: uuid.MustParse(dto.CategoryId),
 		ImageURL:   dto.ImageURL,
@@ -31,8 +31,8 @@ func createProductParams(dto *dtoCreateProduct) service.ProductParams {
 	}
 }
 
-func createInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
-	return service.InventoryParams{
+func createInventoryParams(dto *dtoCreateInventory) storage_service.InventoryParams {
+	return storage_service.InventoryParams{
 		UserId:     uuid.MustParse(dto.UserId),
 		ProductId:  uuid.MustParse(dto.ProductId),
 		Amount:     dto.Amount,
@@ -40,32 +40,34 @@ func createInventoryParams(dto *dtoCreateInventory) service.InventoryParams {
 	}
 }
 
-func createRecipeParams(dto *dtoCreateRecipe) service.RecipeParams {
-	instructions := []service.Instructions{}
+func createRecipeParams(dto *dtoCreateRecipe) storage_service.RecipeParams {
+	var instructions []storage_service.Instructions
 	for _, v := range dto.Instructions {
-		instructions = append(instructions, service.Instructions{
+		instructions = append(instructions, storage_service.Instructions{
 			RecipeId:    uuid.Nil,
 			Description: v.Description,
 			Priority:    v.Priority,
 		})
 	}
-	recipesProducts := []service.RecipesProducts{}
+
+	var RecipeProducts []storage_service.RecipeProducts
 	for _, v := range dto.Products {
-		recipesProducts = append(recipesProducts, service.RecipesProducts{
+		RecipeProducts = append(RecipeProducts, storage_service.RecipeProducts{
 			RecipeId:   uuid.Nil,
 			ProductId:  uuid.MustParse(v.ProductId),
 			Amount:     v.Amount,
 			AmountType: v.AmountType,
 		})
 	}
-	return service.RecipeParams{
+
+	return storage_service.RecipeParams{
 		Name:               dto.Name,
 		Description:        dto.Description,
 		AuthorId:           uuid.MustParse(dto.AuthorId),
 		CookingTimeMinutes: dto.CookingTimeMinutes,
 		ImageURL:           dto.ImageURL,
 		Instructions:       instructions,
-		RecipesProducts:    recipesProducts,
+		RecipeProducts:     RecipeProducts,
 	}
 }
 
@@ -94,4 +96,57 @@ func mapDtoInventories(inventories []*storage_model.Inventory) []*dtoInventory {
 	}
 
 	return dtoInventories
+}
+
+func mapServiceRecipesToDto(recipes []*storage_service.Recipe) []*dtoRecipe {
+	var dtoRecipes []*dtoRecipe
+
+	for _, recipe := range recipes {
+		dtoRecipes = append(dtoRecipes, mapServiceRecipeToDto(recipe))
+	}
+
+	return dtoRecipes
+}
+
+func mapServiceRecipeToDto(recipe *storage_service.Recipe) *dtoRecipe {
+	return &dtoRecipe{
+		Id:                 recipe.Recipe.Id,
+		Name:               recipe.Recipe.Name,
+		Description:        recipe.Recipe.Description,
+		AuthorId:           recipe.Recipe.AuthorId,
+		CookingTimeMinutes: recipe.Recipe.CookingTimeMinutes,
+		ImageURL:           recipe.Recipe.ImageURL,
+		Instructions:       mapDtoInstructions(recipe.Instructions),
+		Products:           mapDtoRecipeProducts(recipe.Products),
+	}
+}
+
+func mapDtoInstructions(instructions []*storage_model.Instruction) []*dtoInstruction {
+	var dtoInstructions []*dtoInstruction
+
+	for _, instruction := range instructions {
+		dtoInstructions = append(dtoInstructions, &dtoInstruction{
+			Description: instruction.Description,
+			Priority:    instruction.Priority,
+		})
+	}
+
+	return dtoInstructions
+}
+
+func mapDtoRecipeProducts(products []*storage_model.RecipeProducts) []*dtoRecipeProduct {
+	var dtoRecipeProducts []*dtoRecipeProduct
+
+	for _, product := range products {
+		dtoRecipeProducts = append(dtoRecipeProducts, &dtoRecipeProduct{
+			ProductId:  product.ProductId,
+			Name:       product.Product.Name,
+			Amount:     product.Amount,
+			AmountType: product.AmountType,
+			ImageURL:   product.Product.ImageURL,
+			CategoryId: product.Product.CategoryId,
+		})
+	}
+
+	return dtoRecipeProducts
 }
