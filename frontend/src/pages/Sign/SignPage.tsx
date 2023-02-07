@@ -2,6 +2,7 @@ import React, { FC, FormEvent, useState } from 'react';
 import { requestApi } from '../../config/api';
 import { Link, useNavigate } from 'react-router-dom';
 import TextInput from '../../components/TextInput';
+import { ErrorMessage } from 'formik';
 
 interface SignPageProps {
   action: string;
@@ -10,31 +11,31 @@ interface SignPageProps {
 const SignPage: FC<SignPageProps> = ({ action }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
-  const actions = {
-    'sign-in': (evt: FormEvent<HTMLFormElement>) => {
-      evt.preventDefault();
-      setIsLoading(true);
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>, type: string) => {
+    setError(undefined);
+    evt.preventDefault();
+    setIsLoading(true);
+    if (type === 'sign-up') {
+      requestApi('POST', 'sign-up', { data: evt.target })
+        .then(() => handleSubmit(evt, 'sign-in'))
+        .catch((err) => setError(err.response.data));
+    } else {
       requestApi('POST', 'sign-in', { data: evt.target })
         .then(() => {
-          navigate('/');
+          navigate('/products');
         })
-        .catch((err) => console.log(err));
-    },
-    'sign-up': (evt: FormEvent<HTMLFormElement>) => {
-      evt.preventDefault();
-      setIsLoading(true);
-      requestApi('POST', 'sign-up', { data: evt.target })
-        .then(() => actions['sign-in'](evt))
-        .catch((err) => console.log(err));
-    },
+        .catch((err) => setError(err.response.data));
+    }
+    setIsLoading(false);
   };
 
   return (
     <form
       className={'w-1/2 mx-auto'}
       onSubmit={(evt) => {
-        actions[action as keyof typeof actions](evt);
+        handleSubmit(evt, action);
       }}
     >
       <TextInput
@@ -53,6 +54,7 @@ const SignPage: FC<SignPageProps> = ({ action }) => {
         className={'mb-4'}
         required
       />
+      {!!error && <p className={'text-red-500'}>{error}</p>}
       <div className={'text-center'}>
         <button
           className={

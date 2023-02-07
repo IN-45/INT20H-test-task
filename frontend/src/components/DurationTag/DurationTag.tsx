@@ -10,7 +10,7 @@ const DurationTag: React.FC<DurationTagProps> = ({ duration, className }) => {
   return (
     <div className={'flex ' + className}>
       <ClockIcon className='w-[15px] h-[15px]' />
-      <p className='text-sm font-medium ml-1'>{duration} хв</p>
+      <p className='text-sm font-medium ml-1'>Cooking time: {duration} min</p>
     </div>
   );
 };
