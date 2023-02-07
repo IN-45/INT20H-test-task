@@ -31,6 +31,7 @@ func RegisterProductHandler(app *fiber.App, h *ProductHandler) {
 	app.Get("/products", h.GetAll)
 	app.Get("/product/:id", h.GetById)
 	app.Post("/product", h.Create)
+	app.Get("/amount_types", h.GetAmountTypes)
 }
 
 // GetAll
@@ -110,6 +111,24 @@ func (h *ProductHandler) Create(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(id)
+}
+
+// GetAmountTypes
+//
+//	@Summary	Get amount types for products
+//	@Tags		Product
+//	@Success	200	{array}		string
+//	@Failure	401	{object}	customerrors.UnauthorizedError
+//	@Failure	500	{object}	fiber.Error
+//	@Router		/amount_types [get]
+func (h *ProductHandler) GetAmountTypes(ctx *fiber.Ctx) error {
+	amountTypes, err := h.productRepository.GetAmountTypes()
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(amountTypes)
 }
 
 type dtoProduct struct {

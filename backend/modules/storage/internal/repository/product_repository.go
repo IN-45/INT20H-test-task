@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
 	"github.com/google/uuid"
 
@@ -67,4 +66,23 @@ func (r *ProductRepository) Create(ctx context.Context, product *storage_model.P
 	}
 
 	return err
+}
+
+func (r *ProductRepository) GetAmountTypes() ([]string, error) {
+	var types []string
+
+	rows, err := r.db.Query("select enumlabel from pg_enum")
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var scanType string
+		err = rows.Scan(&scanType)
+		if err != nil {
+			return nil, err
+		}
+		types = append(types, scanType)
+	}
+	return types, err
 }
