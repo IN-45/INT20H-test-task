@@ -22,17 +22,6 @@ func NewFilterRecipesService(
 	}
 }
 
-func (f *FilterRecipesService) findInInventory(
-	recipeProduct *dtoProduct,
-	inventoryProducts []*storage_model.Inventory) *storage_model.Inventory {
-	for _, product := range inventoryProducts {
-		if product.ProductId == recipeProduct.ProductId && product.AmountType == recipeProduct.AmountType {
-			return product
-		}
-	}
-	return nil
-}
-
 func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UUID) ([]DtoFilterRecipe, error) {
 	recipes, err := f.recipeService.GetAllRecipes(ctx)
 	if err != nil {
@@ -79,15 +68,30 @@ func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UU
 		})
 	}
 
-	sort.Slice(dtoFilterRecipes, func(i, j int) bool {
+	return f.sort(dtoFilterRecipes), nil
+}
+
+func (f *FilterRecipesService) findInInventory(
+	recipeProduct *dtoProduct,
+	inventoryProducts []*storage_model.Inventory) *storage_model.Inventory {
+	for _, product := range inventoryProducts {
+		if product.ProductId == recipeProduct.ProductId && product.AmountType == recipeProduct.AmountType {
+			return product
+		}
+	}
+	return nil
+}
+
+func (f *FilterRecipesService) sort(recipes []DtoFilterRecipe) []DtoFilterRecipe {
+	sort.Slice(recipes, func(i, j int) bool {
 		sumI := 0
 		sumJ := 0
-		for _, product := range dtoFilterRecipes[i].Products {
+		for _, product := range recipes[i].Products {
 			if product.MissedAmount > 0 {
 				sumI++
 			}
 		}
-		for _, product := range dtoFilterRecipes[j].Products {
+		for _, product := range recipes[j].Products {
 			if product.MissedAmount > 0 {
 				sumJ++
 			}
@@ -96,7 +100,7 @@ func (f *FilterRecipesService) FilterRecipes(ctx context.Context, userId uuid.UU
 		return sumI < sumJ
 	})
 
-	return dtoFilterRecipes, nil
+	return recipes
 }
 
 type dtoFilterProduct struct {
