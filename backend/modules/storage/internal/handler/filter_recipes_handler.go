@@ -42,5 +42,26 @@ func (h *FilterRecipesHandler) GetFilterRecipes(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON(filterRecipes)
+	return ctx.JSON(mapServiceFilterRecipesToDto(filterRecipes))
+}
+
+type dtoFilterProduct struct {
+	ProductId    uuid.UUID `json:"product_id"`
+	Name         string    `json:"name"`
+	Amount       int       `json:"amount"`
+	MissedAmount int       `json:"missed_amount"`
+	AmountType   string    `json:"amount_type"`
+	ImageURL     string    `json:"image_url"`
+	CategoryId   uuid.UUID `json:"category_id"`
+}
+
+type dtoFilterRecipe struct {
+	Id                 uuid.UUID           `json:"id"`
+	Name               string              `json:"name"`
+	Description        string              `json:"description"`
+	AuthorId           uuid.UUID           `json:"author_id"`
+	CookingTimeMinutes int                 `json:"cooking_time_minutes"`
+	ImageURL           string              `json:"image_url"`
+	Instructions       []*dtoInstruction   `json:"instructions"`
+	Products           []*dtoFilterProduct `json:"products"`
 }
