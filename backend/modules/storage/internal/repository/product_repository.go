@@ -2,8 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
-
 	storage_model "github.com/IN-45/INT20H-test-task/modules/storage/internal/model"
 	"github.com/google/uuid"
 
@@ -77,12 +75,6 @@ func (r *ProductRepository) GetAmountTypes() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
-
-		}
-	}(rows)
 
 	for rows.Next() {
 		var scanType string
