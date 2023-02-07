@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../features/layout/RootLayout';
 import Products from './Products/Products';
+import SignPage from './Sign/SignPage';
 
 import NotFound from './NotFound';
 import RecipePage from './RecipePage';
@@ -29,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: 'recipe/:id',
         element: <RecipePage />,
+      },
+      {
+        path: 'sign-in',
+        element: <SignPage action={'sign-in'} />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignPage action={'sign-up'} />,
       },
       {
         path: '*',

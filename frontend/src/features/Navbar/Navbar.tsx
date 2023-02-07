@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import NavbarItem, { NavbarItemProps } from './NavbarItem';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 interface NavbarProps {
   routes: NavbarItemProps[];
@@ -8,13 +9,28 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ routes }) => {
   const [menuIsShown, setMenuIsShown] = useState(true);
+  const [cookies, , removeCookies] = useCookies(['token', 'user_id']);
+  const navigate = useNavigate();
+  // console.log(cookies);
+  const { token } = cookies;
+
+  const loginAction = {
+    login: () => {
+      navigate('/sign-in');
+    },
+    logout: () => {
+      removeCookies('token');
+      removeCookies('user_id');
+      navigate('/');
+    },
+  };
 
   const tweakMenu = () => {
     setMenuIsShown((prevState) => !prevState);
   };
 
   return (
-    <nav className='flex items-center justify-between flex-wrap bg-navbar p-6'>
+    <nav className='bg-navbar flex items-center justify-between flex-wrap p-6'>
       <NavLink to={'/home'}>
         <div className='flex items-center flex-shrink-0 text-white mr-6'>
           <span className='font-semibold text-xl tracking-tight'>🍕 Food App</span>
@@ -32,26 +48,29 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
           </svg>
         </button>
       </div>
-      {menuIsShown && (
-        <div className='w-full block flex-grow lg:flex lg:items-center lg:w-auto'>
-          <div className='text-lg lg:flex-grow'>
-            {routes.map((route, index) => (
-              <NavbarItem key={index} text={route.text} to={route.to} />
-            ))}
-          </div>
-          <div className={'ml-2 mt-4'}>
-            <NavLink
-              to={'/login'}
-              className={({ isActive }) =>
-                'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded select-none' +
-                (isActive ? ' bg-blue-800' : '')
-              }
-            >
-              Login
-            </NavLink>
-          </div>
+      <div
+        className={`${
+          menuIsShown ? 'visible' : 'hidden'
+        } w-full block flex-grow lg:visible lg:flex lg:items-center lg:w-auto`}
+      >
+        <div className='text-lg lg:flex-grow'>
+          {routes.map((route, index) => (
+            <NavbarItem key={index} text={route.text} to={route.to} />
+          ))}
         </div>
-      )}
+        <div className={'ml-2 mt-4 lg:mt-0'}>
+          <button
+            onClick={() => {
+              loginAction[token ? 'logout' : 'login']();
+            }}
+            className={
+              'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded select-none'
+            }
+          >
+            {token ? 'Logout' : 'Login'}
+          </button>
+        </div>
+      </div>
     </nav>
   );
 };

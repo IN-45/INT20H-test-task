@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
 const apiAxios = axios.create({
   baseURL: 'http://localhost:8000',
+  withCredentials: true,
 });
 
 export async function requestApi<T = never, D = never>(
