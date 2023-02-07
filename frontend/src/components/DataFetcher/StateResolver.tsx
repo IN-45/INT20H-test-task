@@ -11,10 +11,10 @@ interface StateResolverProps {
 
 const StateResolver: FC<StateResolverProps> = ({ state, children, empty, error }) => {
   const navigate = useNavigate();
-  if (state !== 'loading' && empty) return <h1>No data here for now...</h1>;
+  if (state === 'ready' && empty) return <h1>No data here for now...</h1>;
 
-  if (error.status === 401) {
-    navigate('/sign-in')
+  if (state === 'error' && error?.status === 401) {
+    navigate('/sign-in');
   }
 
   switch (state) {
@@ -22,13 +22,13 @@ const StateResolver: FC<StateResolverProps> = ({ state, children, empty, error }
       return (
         <div>
           <p>There seem to be an error...</p>
-          <p>{error.message}</p>
+          <p>{error.data}</p>
         </div>
       );
     case 'loading':
       return <p>Loading...</p>;
     case 'ready':
-      return <div>{children}</div>;
+      return <>{children}</>;
   }
 };
 
