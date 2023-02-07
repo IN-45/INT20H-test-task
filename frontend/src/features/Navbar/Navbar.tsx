@@ -11,8 +11,7 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
   const [menuIsShown, setMenuIsShown] = useState(true);
   const [cookies, , removeCookies] = useCookies(['token', 'user_id']);
   const navigate = useNavigate();
-  // console.log(cookies);
-  const { token } = cookies;
+  const isLogged = cookies.token !== undefined;
 
   const loginAction = {
     login: () => {
@@ -31,7 +30,7 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
 
   return (
     <nav className='bg-navbar flex items-center justify-between flex-wrap p-6'>
-      <NavLink to={'/home'}>
+      <NavLink to={'/'}>
         <div className='flex items-center flex-shrink-0 text-white mr-6'>
           <span className='font-semibold text-xl tracking-tight'>🍕 Food App</span>
         </div>
@@ -61,13 +60,13 @@ const Navbar: FC<NavbarProps> = ({ routes }) => {
         <div className={'ml-2 mt-4 lg:mt-0'}>
           <button
             onClick={() => {
-              loginAction[token ? 'logout' : 'login']();
+              loginAction[isLogged ? 'logout' : 'login']();
             }}
             className={
               'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded select-none'
             }
           >
-            {token ? 'Logout' : 'Login'}
+            {isLogged ? 'Logout' : 'Login'}
           </button>
         </div>
       </div>
