@@ -1,26 +1,15 @@
 import React from 'react';
 
-import AuthorTag from '../AuthorTag';
 import DurationTag from '../DurationTag';
-import TimeTag from '../TimeTag';
 
 interface CardProps {
   id: string;
   image_url: string;
   name: string;
-  author?: string;
   cooking_time_minutes?: number;
-  created_at?: Date;
 }
 
-const Card: React.FC<CardProps> = ({
-  id,
-  name,
-  image_url,
-  author,
-  cooking_time_minutes,
-  created_at,
-}) => {
+const Card: React.FC<CardProps> = ({ id, name, image_url, cooking_time_minutes }) => {
   return (
     <div className='sm:max-w-[400px] space-y-3 hover:text-orange-main relative' id={id}>
       <img
@@ -37,12 +26,6 @@ const Card: React.FC<CardProps> = ({
           />
         )}
         <h4 className='max-sm:text-white-greyscale mt-0'>{name}</h4>
-        {author && created_at && (
-          <div className='w-full flex justify-between text-white-greyscale sm:text-black-secondary sm:opacity-50'>
-            <AuthorTag author={author} />
-            <TimeTag time={created_at} />
-          </div>
-        )}
       </div>
     </div>
   );
