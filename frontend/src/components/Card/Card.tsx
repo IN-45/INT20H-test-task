@@ -9,9 +9,18 @@ interface CardProps {
   name: string;
   cooking_time_minutes?: number;
   type: 'product' | 'recipe';
+
+  unavailable?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ id, name, image_url, cooking_time_minutes, type }) => {
+const Card: React.FC<CardProps> = ({
+  id,
+  name,
+  image_url,
+  cooking_time_minutes,
+  type,
+  unavailable,
+}) => {
   const getCustomStyles = () => {
     if (type === 'recipe') {
       return 'hover:text-orange-main';
@@ -19,7 +28,14 @@ const Card: React.FC<CardProps> = ({ id, name, image_url, cooking_time_minutes, 
   };
 
   const cardContent = (
-    <div className={'sm:max-w-[400px] space-y-3 relative ' + getCustomStyles()} id={id}>
+    <div
+      className={
+        'sm:max-w-[400px] space-y-3 relative ' +
+        getCustomStyles() +
+        (unavailable ? ' opacity-25' : '')
+      }
+      id={id}
+    >
       <img
         src={image_url}
         alt={name}
@@ -39,6 +55,9 @@ const Card: React.FC<CardProps> = ({ id, name, image_url, cooking_time_minutes, 
         )}
         <h4 className='max-sm:text-white-greyscale mt-0'>{name}</h4>
       </div>
+      {unavailable && (
+        <div title={'Not enough products'} className={'absolute w-full h-full bottom-0'}></div>
+      )}
     </div>
   );
 

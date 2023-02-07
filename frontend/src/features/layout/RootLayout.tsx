@@ -20,7 +20,7 @@ const routes: NavbarItemProps[] = [
     text: 'Products',
   },
   {
-    to: '/recipes',
+    to: '/recipe',
     text: 'Recipes',
   },
 ];
